@@ -53,34 +53,42 @@ public class Simulation {
 
         requests = new ArrayList<>();
 
-        fcfs = new FCFS(print[0]);
-        //sstf = new SSTF(print[1]);
-        //scan = new SCAN(print[2]);
-        //cScan = new C_SCAN(print[3]);
+        fcfs = new FCFS(print[0], diskSize);
+        //sstf = new SSTF(print[1], diskSize);
+        //scan = new SCAN(print[2], diskSize);
+        //cScan = new C_SCAN(print[3], diskSize);
 
-        //edf = new EDF(print[4]);
-        //fdScan = new FD_SCAN(print[5]);
+        //edf = new EDF(print[4], diskSize);
+        //fdScan = new FD_SCAN(print[5], diskSize);
     }
 
     public void start(){
         generateRequests();
-        for(Request request : requests){System.out.println(request);}
+        //for(Request request : requests){System.out.println(request);}
 
         while(requestsExist()){
-            addRequest();
+            System.out.println(requests.isEmpty() + " " + fcfs.isEmpty());
+            System.out.println(fcfs.getRequests());
+            addRequests();
+
+            fcfs.schedule(time);
+
+            // głowica zawsze się porusza
+            time += TIME_UNIT;
         }
 
-        // głowica zawsze się porusza
-        time += TIME_UNIT;
+        System.out.println("---------------- FCFS -----------------");
+        System.out.println("Average waiting time: " + 1.0 * fcfs.getTotalWaitTime() / numberOfRequests);
+        System.out.println("Longest waiting time: " + fcfs.getLongestWaitTime());
     }
 
     private boolean requestHasArrived() {
         return requests.getFirst().getArrivalTime() == time;
     }
 
-    private void addRequest(){
-        while(requestHasArrived()){
-            //fcfs.add(new Request(requests.getFirst()));
+    private void addRequests(){
+        while(!requests.isEmpty() && requestHasArrived()){
+            fcfs.add(new Request(requests.getFirst()));
             //sstf.add(new Request(requests.getFirst()));
             //scan.add(new Request(requests.getFirst()));
             //cScan.add(new Request(requests.getFirst()));
@@ -119,6 +127,6 @@ public class Simulation {
     }
 
     private boolean requestsExist() {
-        return !requests.isEmpty();
+        return !requests.isEmpty() || !fcfs.isEmpty();
     }
 }

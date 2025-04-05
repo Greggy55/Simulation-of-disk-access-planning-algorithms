@@ -42,10 +42,11 @@ public class Request {
     }
 
     public void execute(int time){
-        if(hasArrived){
-            executionTime = time;
-            executed = true;
+        if(!hasArrived){
+            throw new IllegalStateException("Executed request has not arrived yet");
         }
+        executionTime = time;
+        executed = true;
     }
 
     public void update(int time){
@@ -98,7 +99,7 @@ public class Request {
 
     @Override
     public String toString() {
-        return String.format("Request: " +
+        return String.format("request: " +
                 "arrivalTime=%-4d" +
                 "\taddress=%-4d" +
                 "\twaitTime=%-4d" +

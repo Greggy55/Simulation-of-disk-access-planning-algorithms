@@ -1,5 +1,6 @@
 package Algorithms;
 
+import Simulation.Disk;
 import Simulation.Request;
 
 import java.util.LinkedList;
@@ -8,21 +9,108 @@ import java.util.Queue;
 public class FCFS {
     private Queue<Request> requests = new LinkedList<>();
     private Request currentRequest;
+    private Disk disk;
 
     private int totalWaitTime = 0;
     private int longestWaitTime = 0;
 
     private final boolean print;
 
-    public FCFS(boolean print){
+    public FCFS(boolean print, int diskSize){
         this.print = print;
 
-        currentRequest = new Request(0,0);
+        currentRequest = new Request(0,-1);
+        currentRequest.update(0);
         currentRequest.execute(0);
+
+        disk = new Disk(diskSize);
+    }
+
+    public void add(Request request){
+        requests.offer(request);
+    }
+
+    public boolean isEmpty(){
+        return requests.isEmpty();
     }
 
     public void schedule(int time){
+        if(print){
+            System.out.printf("(%2d FCFS)\tHead: " + disk.getHead() + "\n", time);
+        }
 
+        executeRequestIfHeadReachedAddress(time);
+
+        while(currentRequest.isExecuted() && !requests.isEmpty()){
+            startRequest(time);
+            executeRequestIfHeadReachedAddress(time);
+        }
+
+        System.out.println(currentRequest.getAddress() +" ? "+ disk.getHead());
+        if(requestAddressIsOnTheLeftSideOfTheHead()){
+            if(!disk.canMoveHeadLeft()){
+                throw new IllegalStateException("Can't move head left side");
+            }
+            disk.moveHeadLeft();
+        }
+        else if(requestAddressIsOnTheRightSideOfTheHead()){
+            if(!disk.canMoveHeadRight()){
+                throw new IllegalStateException("Can't move head right side");
+            }
+            disk.moveHeadRight();
+        }
+        else if(requests.isEmpty()){
+            if(disk.canMoveHeadLeft()){
+                disk.moveHeadLeft();
+            }
+            else{
+                disk.moveHeadRight();
+            }
+        }
+        else{
+            throw new RuntimeException("Should never execute this command");
+        }
+    }
+
+    private boolean requestAddressIsOnTheRightSideOfTheHead() {
+        return currentRequest.getAddress() > disk.getHead();
+    }
+
+    private boolean requestAddressIsOnTheLeftSideOfTheHead() {
+        return currentRequest.getAddress() < disk.getHead();
+    }
+
+    private void executeRequestIfHeadReachedAddress(int time) {
+        if(headReachedAddress()){
+            executeRequest(time);
+            updateStatistics();
+        }
+    }
+
+    private void executeRequest(int time) {
+        currentRequest.execute(time);
+        if(print){
+            System.out.printf("(%2d FCFS)\tExecuted " + currentRequest + "\n", time);
+        }
+    }
+
+    private void startRequest(int time) {
+        currentRequest = requests.poll();
+        if(currentRequest == null){
+            throw new IllegalStateException("Current request should never be null");
+        }
+        if(print){
+            System.out.printf("(%2d FCFS)\tStarted" + currentRequest + "\n", time);
+        }
+    }
+
+    private void updateStatistics(){
+        totalWaitTime += currentRequest.getWaitTime();
+        longestWaitTime = Math.max(longestWaitTime, currentRequest.getWaitTime());
+    }
+
+    private boolean headReachedAddress() {
+        return disk.getHead() == currentRequest.getAddress();
     }
 
     public Request getCurrentRequest() {
@@ -35,5 +123,9 @@ public class FCFS {
 
     public int getLongestWaitTime() {
         return longestWaitTime;
+    }
+
+    public Queue<Request> getRequests() {
+        return requests;
     }
 }

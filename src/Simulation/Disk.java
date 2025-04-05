@@ -1,25 +1,32 @@
 package Simulation;
 
 public class Disk {
-    public final int SIZE;
+    public final int size;
 
     private int head;
 
     public Disk(int size) {
-        SIZE = size;
+        this.size = size;
         head = 0;
     }
 
-    public boolean canMoveHeadLeft(){
-        return head + 1 < SIZE;
+    public int getHead() {
+        if(head < 0 || head >= size){
+            throw new IllegalStateException("Disk head out of bounds");
+        }
+        return head;
     }
 
+    public boolean canMoveHeadLeft(){
+        return head + 1 < size;
+    }
+    // ZLE
     public void moveHeadLeft(){
         head++;
     }
 
     public boolean canMoveHeadRight(){
-        return head > 0;
+        return head >= 0;
     }
 
     public void moveHeadRight(){
@@ -27,6 +34,6 @@ public class Disk {
     }
 
     public boolean accessData(){
-        return head >= 0 && head < SIZE;
+        return head >= 0 && head < size;
     }
 }
