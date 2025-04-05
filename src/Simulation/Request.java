@@ -1,7 +1,6 @@
 package Simulation;
 
 public class Request {
-    private final String NAME;
     private final int ARRIVAL_TIME;
     private final int ADDRESS;
 
@@ -15,8 +14,7 @@ public class Request {
     private int executionTime = -1;
     private boolean executed = false;
 
-    public Request(String name, int arrivalTime, int address, int deadline) {
-        this.NAME = name;
+    public Request(int arrivalTime, int address, int deadline) {
         this.ARRIVAL_TIME = arrivalTime;
         this.ADDRESS = address;
 
@@ -24,8 +22,7 @@ public class Request {
         hasDeadline = true;
     }
 
-    public Request(String name, int arrivalTime, int address) {
-        this.NAME = name;
+    public Request(int arrivalTime, int address) {
         this.ARRIVAL_TIME = arrivalTime;
         this.ADDRESS = address;
 
@@ -58,10 +55,6 @@ public class Request {
 
     public boolean hasArrived(){
         return hasArrived;
-    }
-
-    public String getName() {
-        return NAME;
     }
 
     public int getArrivalTime() {

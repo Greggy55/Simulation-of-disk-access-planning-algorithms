@@ -48,7 +48,6 @@ public class Simulation {
             if(generateWithDeadline()){
                 requests.add(i,
                         new Request(
-                                "R"+i,
                                 rnd.nextInt(maxArrivalTime),
                                 rnd.nextInt(diskSize),
                                 rnd.nextInt(maxDeadlineTime)
@@ -58,7 +57,6 @@ public class Simulation {
             else{
                 requests.add(i,
                         new Request(
-                                "R"+i,
                                 rnd.nextInt(maxArrivalTime),
                                 rnd.nextInt(diskSize)
                         )
