@@ -4,10 +4,9 @@ public class Request {
     private final int arrivalTime;
     private final int address;
 
-    private boolean hasArrived = false;
-
     private final boolean hasDeadline;
     private int deadline;
+    private boolean killed = false;
 
     private int waitTime = 0;
 
@@ -37,36 +36,20 @@ public class Request {
         this.waitTime = request.waitTime;
         this.executionTime = request.executionTime;
         this.executed = request.executed;
-        this.hasArrived = request.hasArrived;
         this.hasDeadline = request.hasDeadline;
     }
 
     public void execute(int time){
-        if(!hasArrived){
-            throw new IllegalStateException("Executed request has not arrived yet");
-        }
         executionTime = time;
+        waitTime = executionTime - arrivalTime;
         executed = true;
     }
 
-    public void update(int time){
-        if(!hasArrived && arrivalTime <= time){
-            hasArrived = true;
+    public void updateDeadline(){
+        deadline--;
+        if(deadline < 0){
+            killed = true;
         }
-        // maybe swap?
-        if(hasArrived){
-            if(!executed){
-                waitTime++;
-                if(hasDeadline){
-                    deadline--;
-                }
-            }
-
-        }
-    }
-
-    public boolean hasArrived(){
-        return hasArrived;
     }
 
     public int getArrivalTime() {

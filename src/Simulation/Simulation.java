@@ -64,11 +64,11 @@ public class Simulation {
 
     public void start(){
         generateRequests();
-        //for(Request request : requests){System.out.println(request);}
+        for(Request request : requests){System.out.println(request);}
 
         while(requestsExist()){
-            System.out.println(requests.isEmpty() + " " + fcfs.isEmpty());
-            System.out.println(fcfs.getRequests());
+            //System.out.println(requests.isEmpty() + " " + fcfs.isEmpty());
+            //System.out.println(fcfs.getRequests());
             addRequests();
 
             fcfs.schedule(time);

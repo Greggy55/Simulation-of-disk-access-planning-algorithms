@@ -18,19 +18,19 @@ public class Disk {
     }
 
     public boolean canMoveHeadLeft(){
-        return head + 1 < size;
+        return head > 0;
     }
-    // ZLE
+
     public void moveHeadLeft(){
-        head++;
+        head--;
     }
 
     public boolean canMoveHeadRight(){
-        return head >= 0;
+        return head + 1 < size;
     }
 
     public void moveHeadRight(){
-        head--;
+        head++;
     }
 
     public boolean accessData(){

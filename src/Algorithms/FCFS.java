@@ -19,8 +19,7 @@ public class FCFS {
     public FCFS(boolean print, int diskSize){
         this.print = print;
 
-        currentRequest = new Request(0,-1);
-        currentRequest.update(0);
+        currentRequest = new Request(0,0);
         currentRequest.execute(0);
 
         disk = new Disk(diskSize);
@@ -39,14 +38,16 @@ public class FCFS {
             System.out.printf("(%2d FCFS)\tHead: " + disk.getHead() + "\n", time);
         }
 
-        executeRequestIfHeadReachedAddress(time);
+        if(!currentRequest.isExecuted()){
+            executeRequestIfHeadReachedAddress(time);
+        }
 
         while(currentRequest.isExecuted() && !requests.isEmpty()){
             startRequest(time);
             executeRequestIfHeadReachedAddress(time);
         }
 
-        System.out.println(currentRequest.getAddress() +" ? "+ disk.getHead());
+        //System.out.println(currentRequest.getAddress() +" ? "+ disk.getHead());
         if(requestAddressIsOnTheLeftSideOfTheHead()){
             if(!disk.canMoveHeadLeft()){
                 throw new IllegalStateException("Can't move head left side");
@@ -100,7 +101,7 @@ public class FCFS {
             throw new IllegalStateException("Current request should never be null");
         }
         if(print){
-            System.out.printf("(%2d FCFS)\tStarted" + currentRequest + "\n", time);
+            System.out.printf("(%2d FCFS)\tStarted " + currentRequest + "\n", time);
         }
     }
 
