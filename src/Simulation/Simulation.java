@@ -14,6 +14,7 @@ public class Simulation {
     private final int numberOfRequests;
     private final int maxArrivalTime;
     private final int maxDeadlineTime;
+    private final int percentOfProcessesWithDeadline;
 
     private List<Request> requests;
 
@@ -29,20 +30,41 @@ public class Simulation {
 
     private int time = 0;
 
-    public Simulation(int numberOfRequests, int maxArrivalTime, int maxDeadlineTime, int diskSize) {
+    public Simulation(int numberOfRequests,
+                      int maxArrivalTime,
+                      int diskSize,
+                      int maxDeadlineTime,
+                      int percentOfProcessesWithDeadline
+    ) {
         this.numberOfRequests = numberOfRequests;
         this.maxArrivalTime = maxArrivalTime;
-        this.maxDeadlineTime = maxDeadlineTime;
         this.diskSize = diskSize;
+        this.maxDeadlineTime = maxDeadlineTime;
+
+        if(percentOfProcessesWithDeadline < 0){
+            percentOfProcessesWithDeadline = 0;
+        }
+        else if(percentOfProcessesWithDeadline > 100){
+            percentOfProcessesWithDeadline = 100;
+        }
+
+        this.percentOfProcessesWithDeadline = percentOfProcessesWithDeadline;
 
         requests = new ArrayList<>();
     }
 
     public void start(){
         generateRequests();
-        for(Request request : requests){
-            System.out.println(request);
+        //for(Request request : requests){System.out.println(request);}
+
+        int requestIndex = 0;
+        while(requestsExist(requestIndex)){
+
         }
+    }
+
+    private void addRequest(){
+
     }
 
     private void generateRequests(){
@@ -65,11 +87,21 @@ public class Simulation {
                         )
                 );
             }
-
         }
+        // sort ascending by arrival time
+        requests.sort((r1, r2) -> Integer.compare(r1.getArrivalTime(), r2.getArrivalTime()));
     }
 
     private boolean generateWithDeadline() {
-        return rnd.nextInt() % 2 == 0;
+        return rnd.nextInt() % (100/percentOfProcessesWithDeadline) == 0;
+    }
+
+    private boolean requestsExist(int requestIndex) {
+        return notALlRequestsCompleted(requestIndex)
+                || !requests.isEmpty();
+    }
+
+    private boolean notALlRequestsCompleted(int requestIndex) {
+        return requestIndex < numberOfRequests;
     }
 }

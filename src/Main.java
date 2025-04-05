@@ -6,7 +6,8 @@ public class Main {
                 10,
                 100,
                 100,
-                100
+                100,
+                20
         );
 
         simulation.start();
