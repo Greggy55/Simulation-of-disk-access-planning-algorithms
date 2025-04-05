@@ -47,12 +47,17 @@ public class FCFS {
             executeRequestIfHeadReachedAddress(time);
         }
 
-        //System.out.println(currentRequest.getAddress() +" ? "+ disk.getHead());
-        if(requestAddressIsOnTheLeftSideOfTheHead()){
-            if(!disk.canMoveHeadLeft()){
-                throw new IllegalStateException("Can't move head left side");
+        moveHead();
+    }
+
+    private void moveHead() {
+        if(requests.isEmpty()){
+            if(disk.canMoveHeadRight()){
+                disk.moveHeadRight();
             }
-            disk.moveHeadLeft();
+            else{
+                disk.moveHeadLeft();
+            }
         }
         else if(requestAddressIsOnTheRightSideOfTheHead()){
             if(!disk.canMoveHeadRight()){
@@ -60,13 +65,11 @@ public class FCFS {
             }
             disk.moveHeadRight();
         }
-        else if(requests.isEmpty()){
-            if(disk.canMoveHeadLeft()){
-                disk.moveHeadLeft();
+        else if(requestAddressIsOnTheLeftSideOfTheHead()){
+            if(!disk.canMoveHeadLeft()){
+                throw new IllegalStateException("Can't move head left side");
             }
-            else{
-                disk.moveHeadRight();
-            }
+            disk.moveHeadLeft();
         }
         else{
             throw new RuntimeException("Should never execute this command");
@@ -90,18 +93,19 @@ public class FCFS {
 
     private void executeRequest(int time) {
         currentRequest.execute(time);
+        requests.poll();
         if(print){
-            System.out.printf("(%2d FCFS)\tExecuted " + currentRequest + "\n", time);
+            System.out.printf("(%2d FCFS)\tExecuted:\t" + currentRequest + "\n", time);
         }
     }
 
     private void startRequest(int time) {
-        currentRequest = requests.poll();
+        currentRequest = requests.peek();
         if(currentRequest == null){
             throw new IllegalStateException("Current request should never be null");
         }
         if(print){
-            System.out.printf("(%2d FCFS)\tStarted " + currentRequest + "\n", time);
+            System.out.printf("(%2d FCFS)\tStarted:\t" + currentRequest + "\n", time);
         }
     }
 

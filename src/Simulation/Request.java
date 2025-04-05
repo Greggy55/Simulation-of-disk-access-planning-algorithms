@@ -82,13 +82,21 @@ public class Request {
 
     @Override
     public String toString() {
-        return String.format("request: " +
-                "arrivalTime=%-4d" +
-                "\taddress=%-4d" +
-                "\twaitTime=%-4d" +
-                (hasDeadline ? ("\tdeadline=%-4d") : "") +
-                (executed ? ("\texecutionTime=%-4d") : ""),
-                arrivalTime, address, waitTime, deadline, executionTime
-        );
+        String result = String.format(
+                        "arrivalTime=%-4d" +
+                        "\taddress=%-4d" +
+                        "\twaitTime=%-4d",
+                        arrivalTime, address, waitTime
+                );
+        if(executed){
+            result += String.format("\texecutionTime=%-4d", executionTime);
+        }
+        else{
+            result += "\texecutionTime=????";
+        }
+        if(hasDeadline){
+            result += String.format("\tdeadline=%-4d", deadline);
+        }
+        return result;
     }
 }

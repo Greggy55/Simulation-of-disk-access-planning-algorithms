@@ -14,7 +14,7 @@ public class Main {
         };
 
         Simulation simulation = new Simulation(
-                4,
+                3,
                 100,
                 100,
                 100,
