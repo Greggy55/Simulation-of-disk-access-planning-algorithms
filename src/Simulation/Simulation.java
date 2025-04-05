@@ -34,7 +34,8 @@ public class Simulation {
                       int maxArrivalTime,
                       int diskSize,
                       int maxDeadlineTime,
-                      int percentOfProcessesWithDeadline
+                      int percentOfProcessesWithDeadline,
+                      boolean[] print
     ) {
         this.numberOfRequests = numberOfRequests;
         this.maxArrivalTime = maxArrivalTime;
@@ -51,6 +52,14 @@ public class Simulation {
         this.percentOfProcessesWithDeadline = percentOfProcessesWithDeadline;
 
         requests = new ArrayList<>();
+
+        fcfs = new FCFS(print[0]);
+        //sstf = new SSTF(print[1]);
+        //scan = new SCAN(print[2]);
+        //cScan = new C_SCAN(print[3]);
+
+        //edf = new EDF(print[4]);
+        //fdScan = new FD_SCAN(print[5]);
     }
 
     public void start(){
