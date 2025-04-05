@@ -1,4 +1,4 @@
-package Disk;
+package Simulation;
 
 public class Disk {
     public final int SIZE;
