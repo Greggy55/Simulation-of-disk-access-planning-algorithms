@@ -28,5 +28,11 @@ public class Simulation {
         TIME_UNIT = timeUnit;
     }
 
-    public void start(){}
+    public void start(){
+
+    }
+
+    public void generateRequests(){
+
+    }
 }
