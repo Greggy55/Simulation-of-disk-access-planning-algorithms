@@ -3,14 +3,21 @@ package Simulation;
 import Algorithms.*;
 import Strategies.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Simulation {
-    private final int DISK_SIZE;
-    private final int TIME_UNIT;
-    private final int NUMBER_OF_REQUESTS;
+    private static final int TIME_UNIT = 1;
 
-    Random rnd = new Random();
+    private final int diskSize;
+    private final int numberOfRequests;
+    private final int maxArrivalTime;
+    private final int maxDeadlineTime;
+
+    private List<Request> requests;
+
+    private final Random rnd = new Random();
 
     private FCFS fcfs;
     private SSTF sstf;
@@ -22,17 +29,46 @@ public class Simulation {
 
     private int time = 0;
 
-    public Simulation(int numberOfRequests, int diskSize, int timeUnit) {
-        NUMBER_OF_REQUESTS = numberOfRequests;
-        DISK_SIZE = diskSize;
-        TIME_UNIT = timeUnit;
+    public Simulation(int numberOfRequests, int maxArrivalTime, int maxDeadlineTime, int diskSize) {
+        this.numberOfRequests = numberOfRequests;
+        this.maxArrivalTime = maxArrivalTime;
+        this.diskSize = diskSize;
+        this.maxDeadlineTime = maxDeadlineTime;
+
+        requests = new ArrayList<>(numberOfRequests);
     }
 
     public void start(){
 
     }
 
-    public void generateRequests(){
+    private void generateRequests(){
+        for(int i = 1; i <= numberOfRequests; i++){
 
+            if(generateWithDeadline()){
+                requests.add(i,
+                        new Request(
+                                "R"+i,
+                                rnd.nextInt(maxArrivalTime),
+                                rnd.nextInt(diskSize),
+                                rnd.nextInt(maxDeadlineTime)
+                        )
+                );
+            }
+            else{
+                requests.add(i,
+                        new Request(
+                                "R"+i,
+                                rnd.nextInt(maxArrivalTime),
+                                rnd.nextInt(diskSize)
+                        )
+                );
+            }
+
+        }
+    }
+
+    private boolean generateWithDeadline() {
+        return rnd.nextInt() % 2 == 0;
     }
 }
