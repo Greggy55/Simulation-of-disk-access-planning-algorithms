@@ -1,8 +1,8 @@
 package Simulation;
 
 public class Request {
-    private final int ARRIVAL_TIME;
-    private final int ADDRESS;
+    private final int arrivalTime;
+    private final int address;
 
     private boolean hasArrived = false;
 
@@ -15,16 +15,16 @@ public class Request {
     private boolean executed = false;
 
     public Request(int arrivalTime, int address, int deadline) {
-        this.ARRIVAL_TIME = arrivalTime;
-        this.ADDRESS = address;
+        this.arrivalTime = arrivalTime;
+        this.address = address;
 
         this.deadline = deadline;
         hasDeadline = true;
     }
 
     public Request(int arrivalTime, int address) {
-        this.ARRIVAL_TIME = arrivalTime;
-        this.ADDRESS = address;
+        this.arrivalTime = arrivalTime;
+        this.address = address;
 
         this.deadline = -1;
         hasDeadline = false;
@@ -38,7 +38,7 @@ public class Request {
     }
 
     public void update(int time){
-        if(!hasArrived && ARRIVAL_TIME <= time){
+        if(!hasArrived && arrivalTime <= time){
             hasArrived = true;
         }
         // maybe swap?
@@ -58,11 +58,11 @@ public class Request {
     }
 
     public int getArrivalTime() {
-        return ARRIVAL_TIME;
+        return arrivalTime;
     }
 
     public int getAddress() {
-        return ADDRESS;
+        return address;
     }
 
     public boolean hasDeadline() {
@@ -83,5 +83,17 @@ public class Request {
 
     public boolean isExecuted() {
         return executed;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Request: " +
+                "arrivalTime=%-4d" +
+                "\taddress=%-4d" +
+                "\twaitTime=%-4d" +
+                (hasDeadline ? ("\tdeadline=%-4d") : "") +
+                (executed ? ("\texecutionTime=%-4d") : ""),
+                arrivalTime, address, waitTime, deadline, executionTime
+        );
     }
 }

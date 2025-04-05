@@ -1,6 +1,14 @@
+import Simulation.Simulation;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello and welcome!");
+        Simulation simulation = new Simulation(
+                10,
+                100,
+                100,
+                100
+        );
+
+        simulation.start();
     }
 }

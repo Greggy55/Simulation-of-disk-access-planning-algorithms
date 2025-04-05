@@ -32,21 +32,24 @@ public class Simulation {
     public Simulation(int numberOfRequests, int maxArrivalTime, int maxDeadlineTime, int diskSize) {
         this.numberOfRequests = numberOfRequests;
         this.maxArrivalTime = maxArrivalTime;
-        this.diskSize = diskSize;
         this.maxDeadlineTime = maxDeadlineTime;
+        this.diskSize = diskSize;
 
-        requests = new ArrayList<>(numberOfRequests);
+        requests = new ArrayList<>();
     }
 
     public void start(){
-
+        generateRequests();
+        for(Request request : requests){
+            System.out.println(request);
+        }
     }
 
     private void generateRequests(){
-        for(int i = 1; i <= numberOfRequests; i++){
+        for(int i = 0; i < numberOfRequests; i++){
 
             if(generateWithDeadline()){
-                requests.add(i,
+                requests.add(
                         new Request(
                                 rnd.nextInt(maxArrivalTime),
                                 rnd.nextInt(diskSize),
@@ -55,7 +58,7 @@ public class Simulation {
                 );
             }
             else{
-                requests.add(i,
+                requests.add(
                         new Request(
                                 rnd.nextInt(maxArrivalTime),
                                 rnd.nextInt(diskSize)
