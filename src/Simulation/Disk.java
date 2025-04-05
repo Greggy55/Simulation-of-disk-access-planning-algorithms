@@ -4,45 +4,29 @@ public class Disk {
     public final int SIZE;
 
     private int head;
-    private String[] data;
 
     public Disk(int size) {
         SIZE = size;
-        head = size / 2;
-        data = new String[SIZE];
-
-        for(int i = 0; i < size; i++) {
-            data[i] = String.valueOf(i);
-        }
+        head = 0;
     }
 
-    public boolean canMoveLeft(){
+    public boolean canMoveHeadLeft(){
         return head + 1 < SIZE;
     }
 
-    public void moveLeft(){
+    public void moveHeadLeft(){
         head++;
     }
 
-    public boolean canMoveRight(){
+    public boolean canMoveHeadRight(){
         return head > 0;
     }
 
-    public void moveRight(){
+    public void moveHeadRight(){
         head--;
     }
 
-    public String getData(){
-        if(head < 0 || head >= SIZE) {
-            throw new ArrayIndexOutOfBoundsException("head is out of bounds");
-        }
-        return data[head];
-    }
-
-    public void setData(String newData){
-        if(head < 0 || head >= SIZE) {
-            throw new ArrayIndexOutOfBoundsException("head is out of bounds");
-        }
-        data[head] = newData;
+    public boolean accessData(){
+        return head >= 0 && head < SIZE;
     }
 }
