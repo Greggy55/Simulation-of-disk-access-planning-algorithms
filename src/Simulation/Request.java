@@ -30,6 +30,17 @@ public class Request {
         hasDeadline = false;
     }
 
+    public Request(Request request){
+        this.arrivalTime = request.arrivalTime;
+        this.address = request.address;
+        this.deadline = request.deadline;
+        this.waitTime = request.waitTime;
+        this.executionTime = request.executionTime;
+        this.executed = request.executed;
+        this.hasArrived = request.hasArrived;
+        this.hasDeadline = request.hasDeadline;
+    }
+
     public void execute(int time){
         if(hasArrived){
             executionTime = time;

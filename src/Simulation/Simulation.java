@@ -41,8 +41,8 @@ public class Simulation {
         this.diskSize = diskSize;
         this.maxDeadlineTime = maxDeadlineTime;
 
-        if(percentOfProcessesWithDeadline < 0){
-            percentOfProcessesWithDeadline = 0;
+        if(percentOfProcessesWithDeadline <= 0){
+            percentOfProcessesWithDeadline = 1;
         }
         else if(percentOfProcessesWithDeadline > 100){
             percentOfProcessesWithDeadline = 100;
@@ -55,16 +55,29 @@ public class Simulation {
 
     public void start(){
         generateRequests();
-        //for(Request request : requests){System.out.println(request);}
+        for(Request request : requests){System.out.println(request);}
 
-        int requestIndex = 0;
-        while(requestsExist(requestIndex)){
-
+        while(requestsExist()){
+            addRequest();
         }
+
+        // głowica zawsze się porusza
+        time += TIME_UNIT;
+    }
+
+    private boolean requestHasArrived() {
+        return requests.getFirst().getArrivalTime() == time;
     }
 
     private void addRequest(){
+        while(requestHasArrived()){
+            //fcfs.add(new Request(requests.getFirst()));
+            //sstf.add(new Request(requests.getFirst()));
+            //scan.add(new Request(requests.getFirst()));
+            //cScan.add(new Request(requests.getFirst()));
 
+            requests.removeFirst();
+        }
     }
 
     private void generateRequests(){
@@ -96,12 +109,7 @@ public class Simulation {
         return rnd.nextInt() % (100/percentOfProcessesWithDeadline) == 0;
     }
 
-    private boolean requestsExist(int requestIndex) {
-        return notALlRequestsCompleted(requestIndex)
-                || !requests.isEmpty();
-    }
-
-    private boolean notALlRequestsCompleted(int requestIndex) {
-        return requestIndex < numberOfRequests;
+    private boolean requestsExist() {
+        return !requests.isEmpty();
     }
 }
