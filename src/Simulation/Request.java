@@ -37,6 +37,7 @@ public class Request {
         this.executionTime = request.executionTime;
         this.executed = request.executed;
         this.hasDeadline = request.hasDeadline;
+        this.killed = request.killed;
     }
 
     public void execute(int time){

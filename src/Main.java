@@ -9,16 +9,16 @@ public class Main {
                 false,  // SCAN
                 false,  // C-SCAN
 
-                false,  // EDF
+                true,  // EDF
                 false   // FD-SCAN
         };
 
         Simulation simulation = new Simulation(
-                3,
+                5,
                 100,
                 100,
                 100,
-                20,
+                0,
                 print
         );
 

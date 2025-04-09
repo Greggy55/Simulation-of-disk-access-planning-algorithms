@@ -42,8 +42,8 @@ public class Simulation {
         this.diskSize = diskSize;
         this.maxDeadlineTime = maxDeadlineTime;
 
-        if(percentOfProcessesWithDeadline <= 0){
-            percentOfProcessesWithDeadline = 1;
+        if(percentOfProcessesWithDeadline < 0){
+            percentOfProcessesWithDeadline = 0;
         }
         else if(percentOfProcessesWithDeadline > 100){
             percentOfProcessesWithDeadline = 100;
@@ -58,20 +58,20 @@ public class Simulation {
         //scan = new SCAN(print[2], diskSize);
         //cScan = new C_SCAN(print[3], diskSize);
 
-        //edf = new EDF(print[4], diskSize);
+        edf = new EDF(print[4], diskSize);
         //fdScan = new FD_SCAN(print[5], diskSize);
     }
 
     public void start(){
         generateRequests();
-        for(Request request : requests){System.out.println(request);}
+        printAllRequests();
 
         while(requestsExist()){
-            //System.out.println(requests.isEmpty() + " " + fcfs.isEmpty());
-            //System.out.println(fcfs.getRequests());
             addRequests();
 
             fcfs.schedule(time);
+
+            edf.schedule(time);
 
             // głowica zawsze się porusza
             time += TIME_UNIT;
@@ -80,6 +80,14 @@ public class Simulation {
         System.out.println("---------------- FCFS -----------------");
         System.out.println("Average waiting time: " + 1.0 * fcfs.getTotalWaitTime() / numberOfRequests);
         System.out.println("Longest waiting time: " + fcfs.getLongestWaitTime());
+
+        System.out.println("---------------- EDF -----------------");
+        System.out.println("Average waiting time: " + 1.0 * edf.getTotalWaitTime() / numberOfRequests);
+        System.out.println("Longest waiting time: " + edf.getLongestWaitTime());
+    }
+
+    private void printAllRequests() {
+        for(Request request : requests){System.out.println(request);}
     }
 
     private boolean requestHasArrived() {
@@ -93,13 +101,14 @@ public class Simulation {
             //scan.add(new Request(requests.getFirst()));
             //cScan.add(new Request(requests.getFirst()));
 
+            edf.add(new Request(requests.getFirst()));
+
             requests.removeFirst();
         }
     }
 
     private void generateRequests(){
         for(int i = 0; i < numberOfRequests; i++){
-
             if(generateWithDeadline()){
                 requests.add(
                         new Request(
@@ -123,10 +132,15 @@ public class Simulation {
     }
 
     private boolean generateWithDeadline() {
+        if(percentOfProcessesWithDeadline == 0){
+            return false;
+        }
         return rnd.nextInt() % (100/percentOfProcessesWithDeadline) == 0;
     }
 
     private boolean requestsExist() {
-        return !requests.isEmpty() || !fcfs.isEmpty();
+        return !requests.isEmpty()
+                || !fcfs.isEmpty()
+                || !edf.isEmpty();
     }
 }
