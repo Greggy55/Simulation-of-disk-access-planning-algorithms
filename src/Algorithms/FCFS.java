@@ -3,13 +3,16 @@ package Algorithms;
 import Simulation.Disk;
 import Simulation.Request;
 
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class FCFS {
-    private Queue<Request> requests = new LinkedList<>();
+    private PriorityQueue<Request> requests;
     private Request currentRequest;
     private Disk disk;
+    private Comparator<Request> comparator;
 
     private int totalWaitTime = 0;
     private int longestWaitTime = 0;
@@ -18,6 +21,10 @@ public class FCFS {
 
     public FCFS(boolean print, int diskSize){
         this.print = print;
+
+        comparator = Comparator.comparingInt(Request::getArrivalTime);
+
+        requests = new PriorityQueue<>(comparator);
 
         currentRequest = new Request(0,0);
         currentRequest.execute(0);
@@ -132,5 +139,9 @@ public class FCFS {
 
     public Queue<Request> getRequests() {
         return requests;
+    }
+
+    public Comparator<Request> getComparator() {
+        return comparator;
     }
 }

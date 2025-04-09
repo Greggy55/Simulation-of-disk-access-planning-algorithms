@@ -12,6 +12,7 @@ public class EDF {
     private PriorityQueue<Request> requests;
     private Request currentRequest;
     private Disk disk;
+    private Comparator<Request> comparator;
 
     private int totalWaitTime = 0;
     private int longestWaitTime = 0;
@@ -21,16 +22,9 @@ public class EDF {
     public EDF(boolean print, int diskSize){
         this.print = print;
 
-        requests = new PriorityQueue<>(new Comparator<Request>() {
-            @Override
-            public int compare(Request o1, Request o2) {
-                int compare = Integer.compare(o1.getDeadline(), o2.getDeadline());
-                if(compare == 0){
-                    return Integer.compare(o1.getArrivalTime(), o2.getArrivalTime());
-                }
-                return compare;
-            }
-        });
+        comparator = Comparator.comparingInt(Request::getDeadline);
+
+        requests = new PriorityQueue<>();
 
         currentRequest = new Request(0,0);
         currentRequest.execute(0);
