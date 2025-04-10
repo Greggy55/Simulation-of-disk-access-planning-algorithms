@@ -28,10 +28,6 @@ public class SSTF extends Scheduler {
 
         while(currentRequest.isExecuted() && !requests.isEmpty()){
             calculateDistanceFromHeadForAllRequests();
-            int i = 0;
-            for(Request request : requests){
-                System.out.println(++i + ". " + request);
-            }
             startRequest(time);
             executeRequestIfHeadReachedAddress(time);
         }
