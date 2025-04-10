@@ -10,7 +10,6 @@ public abstract class Scheduler {
     protected final String name;
 
     protected PriorityQueue<Request> requestQueue;
-    //protected List<Request> requestList;
 
     protected Request currentRequest;
     protected Request headRequest = null;

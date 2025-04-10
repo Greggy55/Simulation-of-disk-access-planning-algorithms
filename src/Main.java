@@ -5,8 +5,8 @@ public class Main {
 
         boolean[] print = {
                 false,   // FCFS
-                true,  // SSTF
-                false,  // SCAN
+                false,  // SSTF
+                true,  // SCAN
                 false,  // C-SCAN
 
                 false,  // EDF

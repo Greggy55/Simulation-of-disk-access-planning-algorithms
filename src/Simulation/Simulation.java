@@ -55,7 +55,7 @@ public class Simulation {
 
         fcfs = new FCFS(print[0], diskSize);
         sstf = new SSTF(print[1], diskSize);
-        //scan = new SCAN(print[2], diskSize);
+        scan = new SCAN(print[2], diskSize);
         //cScan = new C_SCAN(print[3], diskSize);
 
         edf = new EDF(print[4], diskSize);
@@ -71,7 +71,7 @@ public class Simulation {
 
             fcfs.schedule(time);
             sstf.schedule(time);
-            //scan.schedule(time);
+            scan.schedule(time);
             //cScan.schedule(time);
 
             edf.schedule(time);
@@ -85,7 +85,7 @@ public class Simulation {
 
         fcfs.printStatistics(numberOfRequests);
         sstf.printStatistics(numberOfRequests);
-        //scan.printStatistics(numberOfRequests);
+        scan.printStatistics(numberOfRequests);
         //cScan.printStatistics(numberOfRequests);
 
         edf.printStatistics(numberOfRequests);
@@ -106,7 +106,7 @@ public class Simulation {
         while(requestHasArrived()){
             fcfs.add(new Request(requests.getFirst()));
             sstf.add(new Request(requests.getFirst()));
-            //scan.add(new Request(requests.getFirst()));
+            scan.add(new Request(requests.getFirst()));
             //cScan.add(new Request(requests.getFirst()));
 
             edf.add(new Request(requests.getFirst()));
@@ -117,7 +117,7 @@ public class Simulation {
             if(requests.isEmpty()){
                 fcfs.setHalt(true);
                 sstf.setHalt(true);
-                //scan.setHalt(true);
+                scan.setHalt(true);
                 //cScan.setHalt(true);
 
                 edf.setHalt(true);
@@ -161,7 +161,7 @@ public class Simulation {
         return !requests.isEmpty()
                 || !fcfs.isEmpty()
                 || !sstf.isEmpty()
-                //|| !scan.isEmpty()
+                || !scan.isEmpty()
                 //|| !cScan.isEmpty()
                 || !edf.isEmpty();
                 //|| !fdScan.isEmpty();
