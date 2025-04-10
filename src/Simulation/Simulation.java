@@ -73,7 +73,7 @@ public class Simulation {
 
             edf.schedule(time);
 
-            // głowica zawsze się porusza
+            // head always moves
             time += TIME_UNIT;
         }
 
@@ -82,15 +82,17 @@ public class Simulation {
     }
 
     private void printAllRequests() {
-        for(Request request : requests){System.out.println(request);}
+        for(Request request : requests){
+            System.out.println(request);
+        }
     }
 
     private boolean requestHasArrived() {
-        return requests.getFirst().getArrivalTime() == time;
+        return !requests.isEmpty() && requests.getFirst().getArrivalTime() == time;
     }
 
     private void addRequests(){
-        while(!requests.isEmpty() && requestHasArrived()){
+        while(requestHasArrived()){
             fcfs.add(new Request(requests.getFirst()));
             //sstf.add(new Request(requests.getFirst()));
             //scan.add(new Request(requests.getFirst()));
@@ -127,10 +129,10 @@ public class Simulation {
     }
 
     private boolean generateWithDeadline() {
-        if(percentOfProcessesWithDeadline == 0){
+        if (percentOfProcessesWithDeadline < 0) {
             return false;
         }
-        return rnd.nextInt() % (100/percentOfProcessesWithDeadline) == 0;
+        return rnd.nextInt(100) < percentOfProcessesWithDeadline;
     }
 
     private boolean requestsExist() {

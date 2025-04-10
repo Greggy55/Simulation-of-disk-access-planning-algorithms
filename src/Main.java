@@ -18,7 +18,7 @@ public class Main {
                 100,
                 100,
                 100,
-                0,
+                100,
                 print
         );
 

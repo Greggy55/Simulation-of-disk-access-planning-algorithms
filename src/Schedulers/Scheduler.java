@@ -88,7 +88,7 @@ public abstract class Scheduler {
 
     public void executeRequest(int time) {
         currentRequest.execute(time);
-        requests.poll();
+        requests.remove(currentRequest);
         if(print){
             System.out.printf("(%2d %s) \tExecuted:\t" + currentRequest + "\n", time, name);
         }
