@@ -15,6 +15,8 @@ public class Request {
     private boolean executed = false;
     private int stopTime = -1;
 
+    private int distanceFromHead = 0;
+
     public Request(int arrivalTime, int address, int deadline) {
         this.arrivalTime = arrivalTime;
         this.address = address;
@@ -41,6 +43,7 @@ public class Request {
         this.hasDeadline = request.hasDeadline;
         this.killed = request.killed;
         this.killTime = request.killTime;
+        this.distanceFromHead = request.distanceFromHead;
     }
 
     public void execute(int time){
@@ -87,12 +90,20 @@ public class Request {
         return waitTime;
     }
 
-    public int getExecutionTime() {
+    public int getStopTime() {
         return stopTime;
     }
 
     public boolean isExecuted() {
         return executed;
+    }
+
+    public int getDistanceFromHead(){
+        return distanceFromHead;
+    }
+
+    public void calculateDistanceFromHead(int headAddress) {
+        distanceFromHead = Math.abs(headAddress - address);
     }
 
     @Override

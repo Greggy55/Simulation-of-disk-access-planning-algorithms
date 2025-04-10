@@ -54,7 +54,7 @@ public class Simulation {
         requests = new ArrayList<>();
 
         fcfs = new FCFS(print[0], diskSize);
-        //sstf = new SSTF(print[1], diskSize);
+        sstf = new SSTF(print[1], diskSize);
         //scan = new SCAN(print[2], diskSize);
         //cScan = new C_SCAN(print[3], diskSize);
 
@@ -70,8 +70,12 @@ public class Simulation {
             addRequests();
 
             fcfs.schedule(time);
+            sstf.schedule(time);
+            //scan.schedule(time);
+            //cScan.schedule(time);
 
             edf.schedule(time);
+            //fdScan.schedule(time);
 
             //System.out.println();
 
@@ -80,7 +84,12 @@ public class Simulation {
         }
 
         fcfs.printStatistics(numberOfRequests);
+        sstf.printStatistics(numberOfRequests);
+        //scan.printStatistics(numberOfRequests);
+        //cScan.printStatistics(numberOfRequests);
+
         edf.printStatistics(numberOfRequests);
+        //fdScan.printStatistics(numberOfRequests);
     }
 
     private void printAllRequests() {
@@ -96,7 +105,7 @@ public class Simulation {
     private void addRequests(){
         while(requestHasArrived()){
             fcfs.add(new Request(requests.getFirst()));
-            //sstf.add(new Request(requests.getFirst()));
+            sstf.add(new Request(requests.getFirst()));
             //scan.add(new Request(requests.getFirst()));
             //cScan.add(new Request(requests.getFirst()));
 
@@ -107,7 +116,7 @@ public class Simulation {
 
             if(requests.isEmpty()){
                 fcfs.setHalt(true);
-                //sstf.setHalt(true);
+                sstf.setHalt(true);
                 //scan.setHalt(true);
                 //cScan.setHalt(true);
 
@@ -151,6 +160,10 @@ public class Simulation {
     private boolean requestsExist() {
         return !requests.isEmpty()
                 || !fcfs.isEmpty()
+                || !sstf.isEmpty()
+                //|| !scan.isEmpty()
+                //|| !cScan.isEmpty()
                 || !edf.isEmpty();
+                //|| !fdScan.isEmpty();
     }
 }

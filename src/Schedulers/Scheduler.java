@@ -133,9 +133,9 @@ public abstract class Scheduler {
     public void printStatistics(int numberOfRequests) {
         final int dashes = 15;
         System.out.printf("%s %s %s\n", "-".repeat(dashes), name, "-".repeat(dashes - name.length() + dashes/3));
-        System.out.println("Average waiting time: " + 1.0 * totalWaitTime / numberOfRequests);
-        System.out.println("Longest waiting time: " + longestWaitTime);
-        System.out.println("Number of head moves: " + numberOfHeadMoves);
+        System.out.printf("Average waiting time: %.2f\n", 1.0 * totalWaitTime / numberOfRequests);
+        System.out.printf("Longest waiting time: %d\n", longestWaitTime);
+        System.out.printf("Number of head moves: %d\n", numberOfHeadMoves);
     }
 
     public boolean headReachedAddress() {
