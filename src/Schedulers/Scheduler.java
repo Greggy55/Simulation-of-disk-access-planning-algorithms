@@ -1,0 +1,124 @@
+package Schedulers;
+
+import Comp.CompoundComparator;
+import Simulation.Disk;
+import Simulation.Request;
+
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+public abstract class Scheduler {
+    protected final String name;
+
+    protected PriorityQueue<Request> requests;
+    protected Request currentRequest;
+    protected Disk disk;
+    protected CompoundComparator<Request> comparator;
+
+    protected int totalWaitTime = 0;
+    protected int longestWaitTime = 0;
+    protected int numberOfHeadMoves = 0;
+
+    protected final boolean print;
+
+    public Scheduler(boolean print, int diskSize, String name) {
+        this.print = print;
+        disk = new Disk(diskSize);
+        comparator = new CompoundComparator<>();
+        this.name = name;
+    }
+
+    public void add(Request request){
+        requests.offer(request);
+    }
+
+    public boolean isEmpty(){
+        return requests.isEmpty();
+    }
+
+    public abstract void schedule(int time);
+
+    public void moveHead() {
+        if(requests.isEmpty()){
+            if(disk.canMoveHeadRight()){
+                disk.moveHeadRight();
+            }
+            else{
+                disk.moveHeadLeft();
+            }
+        }
+        else if(requestAddressIsOnTheRightSideOfTheHead()){
+            if(!disk.canMoveHeadRight()){
+                throw new IllegalStateException("Can't move head right side");
+            }
+            disk.moveHeadRight();
+        }
+        else if(requestAddressIsOnTheLeftSideOfTheHead()){
+            if(!disk.canMoveHeadLeft()){
+                throw new IllegalStateException("Can't move head left side");
+            }
+            disk.moveHeadLeft();
+        }
+        else{
+            throw new RuntimeException("Should never execute this command");
+        }
+    }
+
+    public boolean requestAddressIsOnTheRightSideOfTheHead() {
+        return currentRequest.getAddress() > disk.getHead();
+    }
+
+    public boolean requestAddressIsOnTheLeftSideOfTheHead() {
+        return currentRequest.getAddress() < disk.getHead();
+    }
+
+    public void executeRequestIfHeadReachedAddress(int time) {
+        if(headReachedAddress()){
+            executeRequest(time);
+            updateStatistics();
+        }
+    }
+
+    public void executeRequest(int time) {
+        currentRequest.execute(time);
+        requests.poll();
+        if(print){
+            System.out.printf("(%2d %s) \tExecuted:\t" + currentRequest + "\n", time, name);
+        }
+    }
+
+    public void startRequest(int time) {
+        currentRequest = requests.peek();
+        if(currentRequest == null){
+            throw new IllegalStateException("Current request should never be null");
+        }
+        if(print){
+            System.out.printf("(%2d %s) \tStarted:\t" + currentRequest + "\n", time, name);
+        }
+    }
+
+    public void updateStatistics(){
+        totalWaitTime += currentRequest.getWaitTime();
+        longestWaitTime = Math.max(longestWaitTime, currentRequest.getWaitTime());
+    }
+
+    public boolean headReachedAddress() {
+        return disk.getHead() == currentRequest.getAddress();
+    }
+
+    public Request getCurrentRequest() {
+        return currentRequest;
+    }
+
+    public int getTotalWaitTime() {
+        return totalWaitTime;
+    }
+
+    public int getLongestWaitTime() {
+        return longestWaitTime;
+    }
+
+    public Queue<Request> getRequests() {
+        return requests;
+    }
+}
