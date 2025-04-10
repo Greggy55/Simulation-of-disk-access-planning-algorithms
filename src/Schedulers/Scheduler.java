@@ -60,7 +60,9 @@ public abstract class Scheduler {
 
     public void moveHead() {
         if(requestQueue.isEmpty()){
-            sweep();
+            if(!halt){
+                sweep();
+            }
         }
         else if(requestAddressIsOnTheRightSideOfTheHead()){
             if(!disk.canMoveHeadRight()){
@@ -82,16 +84,14 @@ public abstract class Scheduler {
     }
 
     public void sweep() {
-        if(!halt){
-            checkMovementDirection();
-            if(movingRight){
-                disk.moveHeadRight();
-            }
-            else{
-                disk.moveHeadLeft();
-            }
-            numberOfHeadMoves++;
+        checkMovementDirection();
+        if(movingRight){
+            disk.moveHeadRight();
         }
+        else{
+            disk.moveHeadLeft();
+        }
+        numberOfHeadMoves++;
     }
 
     public boolean requestAddressIsOnTheRightSideOfTheHead() {
