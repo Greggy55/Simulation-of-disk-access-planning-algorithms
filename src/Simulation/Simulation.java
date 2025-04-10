@@ -79,8 +79,8 @@ public class Simulation {
             time += TIME_UNIT;
         }
 
-        fcfs.getStatistics(numberOfRequests);
-        edf.getStatistics(numberOfRequests);
+        fcfs.printStatistics(numberOfRequests);
+        edf.printStatistics(numberOfRequests);
     }
 
     private void printAllRequests() {
@@ -101,8 +101,19 @@ public class Simulation {
             //cScan.add(new Request(requests.getFirst()));
 
             edf.add(new Request(requests.getFirst()));
+            //fdScan.add(new Request(requests.getFirst()));
 
             requests.removeFirst();
+
+            if(requests.isEmpty()){
+                fcfs.setHalt(true);
+                //sstf.setHalt(true);
+                //scan.setHalt(true);
+                //cScan.setHalt(true);
+
+                edf.setHalt(true);
+                //fdScan.setHalt(true);
+            }
         }
     }
 

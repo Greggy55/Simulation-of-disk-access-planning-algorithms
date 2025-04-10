@@ -22,8 +22,7 @@ public class EDF extends Scheduler {
         if(currentRequest.isDeadlineAchieved()){
             killRequest(time);
         }
-
-        if(!currentRequest.isExecuted()){
+        else if(!currentRequest.isExecuted()){
             executeRequestIfHeadReachedAddress(time);
         }
 

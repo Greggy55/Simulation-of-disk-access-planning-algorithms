@@ -19,7 +19,9 @@ public abstract class Scheduler {
     protected int longestWaitTime = 0;
     protected int numberOfHeadMoves = 0;
 
-    protected final boolean print;
+    protected boolean halt = false;
+
+    protected boolean print;
 
     public Scheduler(boolean print, int diskSize, String name) {
         this.print = print;
@@ -29,7 +31,7 @@ public abstract class Scheduler {
         comparator = new CompoundComparator<>();
         requests = new PriorityQueue<>(comparator);
 
-        currentRequest = new Request(0,0);
+        currentRequest = new Request(0,0, 0);
         currentRequest.execute(0);
     }
 
@@ -45,11 +47,14 @@ public abstract class Scheduler {
 
     public void moveHead() {
         if(requests.isEmpty()){
-            if(disk.canMoveHeadRight()){
-                disk.moveHeadRight();
-            }
-            else{
-                disk.moveHeadLeft();
+            if(!halt){
+                if(disk.canMoveHeadRight()){
+                    disk.moveHeadRight();
+                }
+                else{
+                    disk.moveHeadLeft();
+                }
+                numberOfHeadMoves++;
             }
         }
         else if(requestAddressIsOnTheRightSideOfTheHead()){
@@ -57,18 +62,18 @@ public abstract class Scheduler {
                 throw new IllegalStateException("Can't move head right side");
             }
             disk.moveHeadRight();
+            numberOfHeadMoves++;
         }
         else if(requestAddressIsOnTheLeftSideOfTheHead()){
             if(!disk.canMoveHeadLeft()){
                 throw new IllegalStateException("Can't move head left side");
             }
             disk.moveHeadLeft();
+            numberOfHeadMoves++;
         }
         else{
             throw new RuntimeException("Should never execute this command");
         }
-
-        numberOfHeadMoves++;
     }
 
     public boolean requestAddressIsOnTheRightSideOfTheHead() {
@@ -92,6 +97,13 @@ public abstract class Scheduler {
         if(print){
             System.out.printf("(%2d %s) \tExecuted:\t" + currentRequest + "\n", time, name);
         }
+        stopPrintingIfDone();
+    }
+
+    private void stopPrintingIfDone() {
+        if(halt && isEmpty()){
+            print = false;
+        }
     }
 
     public void startRequest(int time) {
@@ -110,6 +122,7 @@ public abstract class Scheduler {
         if(print){
             System.out.printf("(%2d %s) \tKilled:\t" + currentRequest + "\n", time, name);
         }
+        stopPrintingIfDone();
     }
 
     public void updateStatistics(){
@@ -117,11 +130,12 @@ public abstract class Scheduler {
         longestWaitTime = Math.max(longestWaitTime, currentRequest.getWaitTime());
     }
 
-    public void getStatistics(int numberOfRequests) {
+    public void printStatistics(int numberOfRequests) {
         final int dashes = 15;
         System.out.printf("%s %s %s\n", "-".repeat(dashes), name, "-".repeat(dashes - name.length() + dashes/3));
         System.out.println("Average waiting time: " + 1.0 * totalWaitTime / numberOfRequests);
         System.out.println("Longest waiting time: " + longestWaitTime);
+        System.out.println("Number of head moves: " + numberOfHeadMoves);
     }
 
     public boolean headReachedAddress() {
@@ -142,5 +156,9 @@ public abstract class Scheduler {
 
     public Queue<Request> getRequests() {
         return requests;
+    }
+
+    public void setHalt(boolean halt) {
+        this.halt = halt;
     }
 }
