@@ -73,6 +73,8 @@ public class Simulation {
 
             edf.schedule(time);
 
+            //System.out.println();
+
             // head always moves
             time += TIME_UNIT;
         }

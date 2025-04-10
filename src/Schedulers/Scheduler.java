@@ -110,7 +110,8 @@ public abstract class Scheduler {
     }
 
     public void getStatistics(int numberOfRequests) {
-        System.out.println("---------------- " + name + " -----------------");
+        final int dashes = 15;
+        System.out.printf("%s %s %s\n", "-".repeat(dashes), name, "-".repeat(dashes - name.length() + dashes/3));
         System.out.println("Average waiting time: " + 1.0 * totalWaitTime / numberOfRequests);
         System.out.println("Longest waiting time: " + longestWaitTime);
     }
