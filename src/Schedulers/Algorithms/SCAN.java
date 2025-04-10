@@ -22,7 +22,7 @@ public class SCAN extends Scheduler {
             currentRequest = getHeadRequest();
             executeRequest(time);
         }
-        System.out.println(requestQueue);
-        moveHead();
+        //System.out.println(requestQueue);
+        sweep();
     }
 }

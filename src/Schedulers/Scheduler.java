@@ -60,16 +60,7 @@ public abstract class Scheduler {
 
     public void moveHead() {
         if(requestQueue.isEmpty()){
-            if(!halt){
-                checkMovementDirection();
-                if(movingRight){
-                    disk.moveHeadRight();
-                }
-                else{
-                    disk.moveHeadLeft();
-                }
-                numberOfHeadMoves++;
-            }
+            sweep();
         }
         else if(requestAddressIsOnTheRightSideOfTheHead()){
             if(!disk.canMoveHeadRight()){
@@ -87,6 +78,19 @@ public abstract class Scheduler {
         }
         else{
             throw new RuntimeException("Should never execute this command");
+        }
+    }
+
+    public void sweep() {
+        if(!halt){
+            checkMovementDirection();
+            if(movingRight){
+                disk.moveHeadRight();
+            }
+            else{
+                disk.moveHeadLeft();
+            }
+            numberOfHeadMoves++;
         }
     }
 
