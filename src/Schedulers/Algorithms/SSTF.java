@@ -13,10 +13,7 @@ public class SSTF extends Scheduler {
     public SSTF(boolean print, int diskSize) {
         super(print, diskSize, "SSTF");
 
-        comparator = new CompoundComparator<>();
         comparator.addComparator(Comparator.comparingInt(Request::getDistanceFromHead));
-
-        requestQueue = new PriorityQueue<>(comparator);
     }
 
     private void calculateDistanceFromHeadForAllRequests() {

@@ -12,10 +12,7 @@ public class FCFS extends Scheduler {
     public FCFS(boolean print, int diskSize){
         super(print, diskSize, "FCFS");
 
-        comparator = new CompoundComparator<>();
         comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
-
-        requestQueue = new PriorityQueue<>(comparator);
     }
 
     public void schedule(int time){

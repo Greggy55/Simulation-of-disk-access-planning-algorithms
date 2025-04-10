@@ -4,16 +4,17 @@ import Comp.CompoundComparator;
 import Simulation.Disk;
 import Simulation.Request;
 
-import java.util.List;
 import java.util.PriorityQueue;
 
 public abstract class Scheduler {
     protected final String name;
 
     protected PriorityQueue<Request> requestQueue;
-    protected List<Request> requestList;
+    //protected List<Request> requestList;
 
     protected Request currentRequest;
+    protected Request headRequest = null;
+
     protected Disk disk;
     protected CompoundComparator<Request> comparator;
 
@@ -31,6 +32,9 @@ public abstract class Scheduler {
         this.print = print;
         disk = new Disk(diskSize);
         this.name = name;
+
+        comparator = new CompoundComparator<>();
+        requestQueue = new PriorityQueue<>(comparator);
 
         currentRequest = new Request(0,0, 0);
         currentRequest.execute(0);
@@ -149,8 +153,21 @@ public abstract class Scheduler {
         System.out.printf("Number of head moves: %d\n", numberOfHeadMoves);
     }
 
-    public boolean headFoundAddress(){
+    public boolean headFoundRequest() {
+        for (Request request : requestQueue) {
+            if (disk.getHead() == request.getAddress()) {
+                headRequest = request;
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    public Request getHeadRequest() {
+        Request returnRequest = headRequest;
+        headRequest = null;
+        return returnRequest;
     }
 
     public boolean headReachedAddress() {

@@ -12,11 +12,8 @@ public class EDF extends Scheduler {
     public EDF(boolean print, int diskSize){
         super(print, diskSize, "EDF");
 
-        comparator = new CompoundComparator<>();
         comparator.addComparator(Comparator.comparingInt(Request::getDeadline));
         comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
-
-        requestQueue = new PriorityQueue<>(comparator);
     }
 
     public void schedule(int time){
