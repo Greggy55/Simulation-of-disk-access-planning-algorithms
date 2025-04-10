@@ -15,11 +15,6 @@ public class FCFS extends Scheduler {
         super(print, diskSize, "FCFS");
 
         comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
-
-        requests = new PriorityQueue<>(comparator);
-
-        currentRequest = new Request(0,0);
-        currentRequest.execute(0);
     }
 
     public void schedule(int time){

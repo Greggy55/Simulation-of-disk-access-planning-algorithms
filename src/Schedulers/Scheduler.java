@@ -24,8 +24,13 @@ public abstract class Scheduler {
     public Scheduler(boolean print, int diskSize, String name) {
         this.print = print;
         disk = new Disk(diskSize);
-        comparator = new CompoundComparator<>();
         this.name = name;
+
+        comparator = new CompoundComparator<>();
+        requests = new PriorityQueue<>(comparator);
+
+        currentRequest = new Request(0,0);
+        currentRequest.execute(0);
     }
 
     public void add(Request request){
