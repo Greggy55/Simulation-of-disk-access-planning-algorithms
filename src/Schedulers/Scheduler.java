@@ -21,6 +21,8 @@ public abstract class Scheduler {
 
     protected boolean halt = false;
 
+    private boolean movingRight = true;
+
     protected boolean print;
 
     public Scheduler(boolean print, int diskSize, String name) {
@@ -45,10 +47,20 @@ public abstract class Scheduler {
 
     public abstract void schedule(int time);
 
+    public void checkMovementDirection(){
+        if(movingRight && !disk.canMoveHeadRight()){
+                movingRight = false;
+        }
+        if(!movingRight && !disk.canMoveHeadLeft()){
+            movingRight = true;
+        }
+    }
+
     public void moveHead() {
         if(requests.isEmpty()){
             if(!halt){
-                if(disk.canMoveHeadRight()){
+                checkMovementDirection();
+                if(movingRight){
                     disk.moveHeadRight();
                 }
                 else{
