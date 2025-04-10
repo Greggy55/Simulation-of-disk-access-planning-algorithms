@@ -6,12 +6,14 @@ public class Request {
 
     private final boolean hasDeadline;
     private int deadline;
+
     private boolean killed = false;
+    private int killTime = -1;
 
     private int waitTime = 0;
 
-    private int executionTime = -1;
     private boolean executed = false;
+    private int executionTime = -1;
 
     public Request(int arrivalTime, int address, int deadline) {
         this.arrivalTime = arrivalTime;
@@ -38,6 +40,7 @@ public class Request {
         this.executed = request.executed;
         this.hasDeadline = request.hasDeadline;
         this.killed = request.killed;
+        this.killTime = request.killTime;
     }
 
     public void execute(int time){
@@ -46,11 +49,22 @@ public class Request {
         executed = true;
     }
 
+    public void kill(int time){
+        executionTime = time;
+        waitTime = executionTime - arrivalTime;
+        killed = true;
+    }
+
     public void updateDeadline(){
         deadline--;
-        if(deadline < 0){
-            killed = true;
-        }
+    }
+
+    public boolean isDeadlineAchieved(){
+        return deadline < 0;
+    }
+
+    public boolean isKilled() {
+        return killed;
     }
 
     public int getArrivalTime() {
@@ -89,15 +103,21 @@ public class Request {
                         "\twaitTime=%-4d",
                         arrivalTime, address, waitTime
                 );
+
         if(executed){
             result += String.format("\texecutionTime=%-4d", executionTime);
+        }
+        else if(killed){
+            result += "\texecutionTime=kill";
         }
         else{
             result += "\texecutionTime=????";
         }
+
         if(hasDeadline){
             result += String.format("\tdeadline=%-4d", deadline);
         }
+
         return result;
     }
 }

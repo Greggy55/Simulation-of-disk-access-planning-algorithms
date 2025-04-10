@@ -104,6 +104,14 @@ public abstract class Scheduler {
         }
     }
 
+    public void killRequest(int time) {
+        currentRequest.kill(time);
+        requests.remove(currentRequest);
+        if(print){
+            System.out.printf("(%2d %s) \tKilled:\t" + currentRequest + "\n", time, name);
+        }
+    }
+
     public void updateStatistics(){
         totalWaitTime += currentRequest.getWaitTime();
         longestWaitTime = Math.max(longestWaitTime, currentRequest.getWaitTime());

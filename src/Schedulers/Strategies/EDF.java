@@ -19,6 +19,10 @@ public class EDF extends Scheduler {
             System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
+        if(currentRequest.isDeadlineAchieved()){
+            killRequest(time);
+        }
+
         if(!currentRequest.isExecuted()){
             executeRequestIfHeadReachedAddress(time);
         }
