@@ -1,7 +1,7 @@
 package Simulation;
 
-import Algorithms.*;
-import Strategies.*;
+import Schedulers.Algorithms.*;
+import Schedulers.Strategies.*;
 
 import java.util.ArrayList;
 import java.util.List;

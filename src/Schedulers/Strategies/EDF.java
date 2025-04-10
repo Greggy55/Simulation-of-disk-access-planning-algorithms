@@ -1,30 +1,32 @@
-package Algorithms;
+package Schedulers.Strategies;
 
+import Comp.CompoundComparator;
 import Simulation.Disk;
 import Simulation.Request;
 
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class FCFS {
+public class EDF {
     private PriorityQueue<Request> requests;
     private Request currentRequest;
     private Disk disk;
-    private Comparator<Request> comparator;
+    private CompoundComparator<Request> comparator;
 
     private int totalWaitTime = 0;
     private int longestWaitTime = 0;
 
     private final boolean print;
 
-    public FCFS(boolean print, int diskSize){
+    public EDF(boolean print, int diskSize){
         this.print = print;
 
-        comparator = Comparator.comparingInt(Request::getArrivalTime);
+        comparator = new CompoundComparator<>();
+        comparator.addComparator(Comparator.comparingInt(Request::getDeadline));
+        comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
 
-        requests = new PriorityQueue<>(comparator);
+        requests = new PriorityQueue<>();
 
         currentRequest = new Request(0,0);
         currentRequest.execute(0);
@@ -42,7 +44,7 @@ public class FCFS {
 
     public void schedule(int time){
         if(print){
-            System.out.printf("(%2d FCFS)\tHead: " + disk.getHead() + "\n", time);
+            System.out.printf("(%2d EDF) \tHead: " + disk.getHead() + "\n", time);
         }
 
         if(!currentRequest.isExecuted()){
@@ -102,7 +104,7 @@ public class FCFS {
         currentRequest.execute(time);
         requests.poll();
         if(print){
-            System.out.printf("(%2d FCFS)\tExecuted:\t" + currentRequest + "\n", time);
+            System.out.printf("(%2d EDF) \tExecuted:\t" + currentRequest + "\n", time);
         }
     }
 
@@ -112,7 +114,7 @@ public class FCFS {
             throw new IllegalStateException("Current request should never be null");
         }
         if(print){
-            System.out.printf("(%2d FCFS)\tStarted:\t" + currentRequest + "\n", time);
+            System.out.printf("(%2d EDF) \tStarted:\t" + currentRequest + "\n", time);
         }
     }
 
@@ -139,9 +141,5 @@ public class FCFS {
 
     public Queue<Request> getRequests() {
         return requests;
-    }
-
-    public Comparator<Request> getComparator() {
-        return comparator;
     }
 }
