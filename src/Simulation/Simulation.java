@@ -77,13 +77,8 @@ public class Simulation {
             time += TIME_UNIT;
         }
 
-        System.out.println("---------------- FCFS -----------------");
-        System.out.println("Average waiting time: " + 1.0 * fcfs.getTotalWaitTime() / numberOfRequests);
-        System.out.println("Longest waiting time: " + fcfs.getLongestWaitTime());
-
-        System.out.println("---------------- EDF -----------------");
-        System.out.println("Average waiting time: " + 1.0 * edf.getTotalWaitTime() / numberOfRequests);
-        System.out.println("Longest waiting time: " + edf.getLongestWaitTime());
+        fcfs.getStatistics(numberOfRequests);
+        edf.getStatistics(numberOfRequests);
     }
 
     private void printAllRequests() {

@@ -109,6 +109,12 @@ public abstract class Scheduler {
         longestWaitTime = Math.max(longestWaitTime, currentRequest.getWaitTime());
     }
 
+    public void getStatistics(int numberOfRequests) {
+        System.out.println("---------------- " + name + " -----------------");
+        System.out.println("Average waiting time: " + 1.0 * totalWaitTime / numberOfRequests);
+        System.out.println("Longest waiting time: " + longestWaitTime);
+    }
+
     public boolean headReachedAddress() {
         return disk.getHead() == currentRequest.getAddress();
     }
