@@ -67,6 +67,8 @@ public abstract class Scheduler {
         else{
             throw new RuntimeException("Should never execute this command");
         }
+
+        numberOfHeadMoves++;
     }
 
     public boolean requestAddressIsOnTheRightSideOfTheHead() {

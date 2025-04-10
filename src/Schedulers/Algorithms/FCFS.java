@@ -1,13 +1,9 @@
 package Schedulers.Algorithms;
 
-import Comp.CompoundComparator;
 import Schedulers.Scheduler;
-import Simulation.Disk;
 import Simulation.Request;
 
 import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 public class FCFS extends Scheduler {
 
@@ -32,7 +28,6 @@ public class FCFS extends Scheduler {
         }
 
         moveHead();
-        numberOfHeadMoves++;
     }
 
 }

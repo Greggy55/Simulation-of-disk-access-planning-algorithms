@@ -4,7 +4,6 @@ import Schedulers.Scheduler;
 import Simulation.Request;
 
 import java.util.Comparator;
-import java.util.PriorityQueue;
 
 public class EDF extends Scheduler {
 
