@@ -20,7 +20,7 @@ public class SCAN extends Scheduler {
 
         if(headFoundRequest()){
             currentRequest = getHeadRequest();
-            executeRequest(time);
+            executeRequestIfHeadReachedAddress(time);
         }
         //System.out.println(requestQueue);
         sweep();

@@ -4,9 +4,9 @@ public class Main {
     public static void main(String[] args) {
 
         boolean[] print = {
-                true,   // FCFS
+                false,   // FCFS
                 false,  // SSTF
-                false,  // SCAN
+                true,  // SCAN
                 false,  // C-SCAN
 
                 false,  // EDF
