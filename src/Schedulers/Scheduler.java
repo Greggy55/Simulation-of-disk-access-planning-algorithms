@@ -4,13 +4,15 @@ import Comp.CompoundComparator;
 import Simulation.Disk;
 import Simulation.Request;
 
+import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
 
 public abstract class Scheduler {
     protected final String name;
 
-    protected PriorityQueue<Request> requests;
+    protected PriorityQueue<Request> requestQueue;
+    protected List<Request> requestList;
+
     protected Request currentRequest;
     protected Disk disk;
     protected CompoundComparator<Request> comparator;
@@ -30,26 +32,23 @@ public abstract class Scheduler {
         disk = new Disk(diskSize);
         this.name = name;
 
-        comparator = new CompoundComparator<>();
-        requests = new PriorityQueue<>(comparator);
-
         currentRequest = new Request(0,0, 0);
         currentRequest.execute(0);
     }
 
     public void add(Request request){
-        requests.offer(request);
+        requestQueue.offer(request);
     }
 
     public boolean isEmpty(){
-        return requests.isEmpty();
+        return requestQueue.isEmpty();
     }
 
     public abstract void schedule(int time);
 
     public void checkMovementDirection(){
         if(movingRight && !disk.canMoveHeadRight()){
-                movingRight = false;
+            movingRight = false;
         }
         if(!movingRight && !disk.canMoveHeadLeft()){
             movingRight = true;
@@ -57,7 +56,7 @@ public abstract class Scheduler {
     }
 
     public void moveHead() {
-        if(requests.isEmpty()){
+        if(requestQueue.isEmpty()){
             if(!halt){
                 checkMovementDirection();
                 if(movingRight){
@@ -105,7 +104,7 @@ public abstract class Scheduler {
 
     public void executeRequest(int time) {
         currentRequest.execute(time);
-        requests.remove(currentRequest);
+        requestQueue.remove(currentRequest);
         if(print){
             System.out.printf("(%2d %s) \tExecuted:\t" + currentRequest + "\n", time, name);
         }
@@ -119,7 +118,7 @@ public abstract class Scheduler {
     }
 
     public void startRequest(int time) {
-        currentRequest = requests.peek();
+        currentRequest = requestQueue.peek();
         if(currentRequest == null){
             throw new IllegalStateException("Current request should never be null");
         }
@@ -130,7 +129,7 @@ public abstract class Scheduler {
 
     public void killRequest(int time) {
         currentRequest.kill(time);
-        requests.remove(currentRequest);
+        requestQueue.remove(currentRequest);
         if(print){
             System.out.printf("(%2d %s) \tKilled:\t" + currentRequest + "\n", time, name);
         }
@@ -150,24 +149,12 @@ public abstract class Scheduler {
         System.out.printf("Number of head moves: %d\n", numberOfHeadMoves);
     }
 
+    public boolean headFoundAddress(){
+        return false;
+    }
+
     public boolean headReachedAddress() {
         return disk.getHead() == currentRequest.getAddress();
-    }
-
-    public Request getCurrentRequest() {
-        return currentRequest;
-    }
-
-    public int getTotalWaitTime() {
-        return totalWaitTime;
-    }
-
-    public int getLongestWaitTime() {
-        return longestWaitTime;
-    }
-
-    public Queue<Request> getRequests() {
-        return requests;
     }
 
     public void setHalt(boolean halt) {

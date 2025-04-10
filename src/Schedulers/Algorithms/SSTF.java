@@ -1,5 +1,6 @@
 package Schedulers.Algorithms;
 
+import Comp.CompoundComparator;
 import Schedulers.Scheduler;
 import Simulation.Request;
 
@@ -12,14 +13,17 @@ public class SSTF extends Scheduler {
     public SSTF(boolean print, int diskSize) {
         super(print, diskSize, "SSTF");
 
+        comparator = new CompoundComparator<>();
         comparator.addComparator(Comparator.comparingInt(Request::getDistanceFromHead));
+
+        requestQueue = new PriorityQueue<>(comparator);
     }
 
     private void calculateDistanceFromHeadForAllRequests() {
-        List<Request> updated = new ArrayList<>(requests);
+        List<Request> updated = new ArrayList<>(requestQueue);
         updated.forEach(request -> request.calculateDistanceFromHead(disk.getHead()));
-        requests = new PriorityQueue<>(comparator);
-        requests.addAll(updated);
+        requestQueue = new PriorityQueue<>(comparator);
+        requestQueue.addAll(updated);
     }
 
     @Override
@@ -32,7 +36,7 @@ public class SSTF extends Scheduler {
             executeRequestIfHeadReachedAddress(time);
         }
 
-        while(currentRequest.isExecuted() && !requests.isEmpty()){
+        while(currentRequest.isExecuted() && !requestQueue.isEmpty()){
             calculateDistanceFromHeadForAllRequests();
             startRequest(time);
             executeRequestIfHeadReachedAddress(time);
@@ -43,7 +47,7 @@ public class SSTF extends Scheduler {
 
     private void printRequests() {
         int i = 0;
-        for(Request request : requests){
+        for(Request request : requestQueue){
             System.out.println(++i + ". " + request);
         }
     }
