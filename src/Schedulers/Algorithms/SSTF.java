@@ -3,7 +3,10 @@ package Schedulers.Algorithms;
 import Schedulers.Scheduler;
 import Simulation.Request;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 
 public class SSTF extends Scheduler {
     public SSTF(boolean print, int diskSize) {
@@ -13,7 +16,10 @@ public class SSTF extends Scheduler {
     }
 
     private void calculateDistanceFromHeadForAllRequests() {
-        requests.forEach(request -> request.calculateDistanceFromHead(disk.getHead()));
+        List<Request> updated = new ArrayList<>(requests);
+        updated.forEach(request -> request.calculateDistanceFromHead(disk.getHead()));
+        requests = new PriorityQueue<>(comparator);
+        requests.addAll(updated);
     }
 
     @Override
@@ -33,5 +39,12 @@ public class SSTF extends Scheduler {
         }
 
         moveHead();
+    }
+
+    private void printRequests() {
+        int i = 0;
+        for(Request request : requests){
+            System.out.println(++i + ". " + request);
+        }
     }
 }
