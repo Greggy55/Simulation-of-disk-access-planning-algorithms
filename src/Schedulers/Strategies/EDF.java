@@ -21,11 +21,13 @@ public class EDF extends Scheduler {
             System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
-        if(currentRequest.isDeadlineAchieved()){
-            killRequest(time);
-        }
-        else if(!currentRequest.isExecuted()){
-            executeRequestIfHeadReachedAddress(time);
+        if(!currentRequest.isExecuted()){
+            if(deadlineExistsAndAchieved()){
+                killRequest(time);
+            }
+            else{
+                executeRequestIfHeadReachedAddress(time);
+            }
         }
 
         while(currentRequest.isExecuted() && !requestQueue.isEmpty()){
@@ -34,6 +36,10 @@ public class EDF extends Scheduler {
         }
 
         moveHead();
+    }
+
+    private boolean deadlineExistsAndAchieved() {
+        return currentRequest.hasDeadline() && currentRequest.isDeadlineAchieved();
     }
 
 }
