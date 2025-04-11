@@ -41,11 +41,4 @@ public class SSTF extends Scheduler {
 
         moveHead();
     }
-
-    private void printRequests() {
-        int i = 0;
-        for(Request request : requestQueue){
-            System.out.println(++i + ". " + request);
-        }
-    }
 }

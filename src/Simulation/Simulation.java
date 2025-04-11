@@ -59,7 +59,7 @@ public class Simulation {
         cScan = new C_SCAN(print[3], diskSize);
 
         edf = new EDF(print[4], diskSize);
-        //fdScan = new FD_SCAN(print[5], diskSize);
+        fdScan = new FD_SCAN(print[5], diskSize);
     }
 
     public void start(){
@@ -75,9 +75,7 @@ public class Simulation {
             cScan.schedule(time);
 
             edf.schedule(time);
-            //fdScan.schedule(time);
-
-            //System.out.println();
+            fdScan.schedule(time);
 
             // head always moves
             time += TIME_UNIT;
@@ -89,7 +87,7 @@ public class Simulation {
         cScan.printStatistics(numberOfRequests);
 
         edf.printStatistics(numberOfRequests);
-        //fdScan.printStatistics(numberOfRequests);
+        fdScan.printStatistics(numberOfRequests);
     }
 
     private void printAllRequests() {
@@ -110,7 +108,7 @@ public class Simulation {
             cScan.add(new Request(requests.getFirst()));
 
             edf.add(new Request(requests.getFirst()));
-            //fdScan.add(new Request(requests.getFirst()));
+            fdScan.add(new Request(requests.getFirst()));
 
             requests.removeFirst();
 
@@ -121,7 +119,7 @@ public class Simulation {
                 cScan.setHalt(true);
 
                 edf.setHalt(true);
-                //fdScan.setHalt(true);
+                fdScan.setHalt(true);
             }
         }
     }
@@ -163,7 +161,7 @@ public class Simulation {
                 || !sstf.isEmpty()
                 || !scan.isEmpty()
                 || !cScan.isEmpty()
-                || !edf.isEmpty();
-                //|| !fdScan.isEmpty();
+                || !edf.isEmpty()
+                || !fdScan.isEmpty();
     }
 }
