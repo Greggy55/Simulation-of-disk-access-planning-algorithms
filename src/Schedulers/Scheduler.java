@@ -7,7 +7,7 @@ import Simulation.Request;
 import java.util.PriorityQueue;
 
 public abstract class Scheduler {
-    protected final String name;
+    protected String name;
 
     protected PriorityQueue<Request> requestQueue;
 
@@ -113,7 +113,7 @@ public abstract class Scheduler {
         currentRequest.execute(time);
         requestQueue.remove(currentRequest);
         if(print){
-            System.out.printf("(%2d %s) \tExecuted:\t" + currentRequest + "\n", time, name);
+            System.out.printf("(%2d %s)\tExecuted:\t" + currentRequest + "\n", time, name);
         }
         stopPrintingIfDone();
     }
@@ -130,7 +130,7 @@ public abstract class Scheduler {
             throw new IllegalStateException("Current request should never be null");
         }
         if(print){
-            System.out.printf("(%2d %s) \tStarted:\t" + currentRequest + "\n", time, name);
+            System.out.printf("(%2d %s)\tStarted:\t" + currentRequest + "\n", time, name);
         }
     }
 
@@ -138,7 +138,7 @@ public abstract class Scheduler {
         currentRequest.kill(time);
         requestQueue.remove(currentRequest);
         if(print){
-            System.out.printf("(%2d %s) \tKilled:\t" + currentRequest + "\n", time, name);
+            System.out.printf("(%2d %s)\tKilled:\t" + currentRequest + "\n", time, name);
         }
         stopPrintingIfDone();
     }

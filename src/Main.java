@@ -6,15 +6,15 @@ public class Main {
         boolean[] print = {
                 false,   // FCFS
                 false,  // SSTF
-                false,  // SCAN
-                false,  // C-SCAN
+                true,  // SCAN
+                true,  // C-SCAN
 
-                true,  // EDF
+                false,  // EDF
                 false   // FD-SCAN
         };
 
         Simulation simulation = new Simulation(
-                100,
+                5,
                 100,
                 100,
                 100,

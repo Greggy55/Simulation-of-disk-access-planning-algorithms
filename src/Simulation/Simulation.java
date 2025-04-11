@@ -56,7 +56,7 @@ public class Simulation {
         fcfs = new FCFS(print[0], diskSize);
         sstf = new SSTF(print[1], diskSize);
         scan = new SCAN(print[2], diskSize);
-        //cScan = new C_SCAN(print[3], diskSize);
+        cScan = new C_SCAN(print[3], diskSize);
 
         edf = new EDF(print[4], diskSize);
         //fdScan = new FD_SCAN(print[5], diskSize);
@@ -72,7 +72,7 @@ public class Simulation {
             fcfs.schedule(time);
             sstf.schedule(time);
             scan.schedule(time);
-            //cScan.schedule(time);
+            cScan.schedule(time);
 
             edf.schedule(time);
             //fdScan.schedule(time);
@@ -86,7 +86,7 @@ public class Simulation {
         fcfs.printStatistics(numberOfRequests);
         sstf.printStatistics(numberOfRequests);
         scan.printStatistics(numberOfRequests);
-        //cScan.printStatistics(numberOfRequests);
+        cScan.printStatistics(numberOfRequests);
 
         edf.printStatistics(numberOfRequests);
         //fdScan.printStatistics(numberOfRequests);
@@ -107,7 +107,7 @@ public class Simulation {
             fcfs.add(new Request(requests.getFirst()));
             sstf.add(new Request(requests.getFirst()));
             scan.add(new Request(requests.getFirst()));
-            //cScan.add(new Request(requests.getFirst()));
+            cScan.add(new Request(requests.getFirst()));
 
             edf.add(new Request(requests.getFirst()));
             //fdScan.add(new Request(requests.getFirst()));
@@ -118,7 +118,7 @@ public class Simulation {
                 fcfs.setHalt(true);
                 sstf.setHalt(true);
                 scan.setHalt(true);
-                //cScan.setHalt(true);
+                cScan.setHalt(true);
 
                 edf.setHalt(true);
                 //fdScan.setHalt(true);
@@ -162,7 +162,7 @@ public class Simulation {
                 || !fcfs.isEmpty()
                 || !sstf.isEmpty()
                 || !scan.isEmpty()
-                //|| !cScan.isEmpty()
+                || !cScan.isEmpty()
                 || !edf.isEmpty();
                 //|| !fdScan.isEmpty();
     }

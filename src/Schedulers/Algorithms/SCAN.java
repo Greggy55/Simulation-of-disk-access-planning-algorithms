@@ -22,7 +22,9 @@ public class SCAN extends Scheduler {
             currentRequest = getHeadRequest();
             executeRequestIfHeadReachedAddress(time);
         }
-        //System.out.println(requestQueue);
-        sweep();
+
+        if(!requestQueue.isEmpty() || !halt){
+            sweep();
+        }
     }
 }

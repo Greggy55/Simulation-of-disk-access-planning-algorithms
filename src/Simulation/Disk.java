@@ -17,6 +17,12 @@ public class Disk {
         return head;
     }
 
+    public void setHead(int head) {
+        if(headAddressIsValid()){
+            this.head = head;
+        }
+    }
+
     public boolean canMoveHeadLeft(){
         return head > 0;
     }
@@ -33,7 +39,7 @@ public class Disk {
         head++;
     }
 
-    public boolean accessData(){
+    public boolean headAddressIsValid(){
         return head >= 0 && head < size;
     }
 }
