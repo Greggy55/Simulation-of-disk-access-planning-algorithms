@@ -1,11 +1,14 @@
 package Schedulers.Strategies;
 
+import Comp.CompoundComparator;
 import Schedulers.Scheduler;
 import Simulation.Request;
 
 import java.util.Comparator;
 
 public class FD_SCAN extends Scheduler {
+    boolean isFCFSActive = false;
+
     public FD_SCAN(boolean print, int diskSize) {
         super(print, diskSize, "FD-SCAN");
 
@@ -19,11 +22,21 @@ public class FD_SCAN extends Scheduler {
             System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
-        if(!currentRequest.isExecuted()){
-            executeRequestIfHeadReachedAddress(time);
+        if(isFCFSActive && requestQueueHasDeadline()){   // set FD-SCAN
+            isFCFSActive = false;
+            name = "FD-SCAN";
+            comparator = new CompoundComparator<>();
+            comparator.addComparator(Comparator.comparingInt(Request::getDeadline));
+            comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
+        }
+        else if (!isFCFSActive && !requestQueueHasDeadline()){  // set FCFS
+            isFCFSActive = true;
+            name = "FCFS";
+            comparator = new CompoundComparator<>();
+            comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
         }
 
-        if(headFoundRequest()){
+        if(!isFCFSActive && headFoundRequest()){    // scan
             Request temp = currentRequest;
 
             currentRequest = getHeadRequest();
@@ -32,8 +45,18 @@ public class FD_SCAN extends Scheduler {
             currentRequest = temp;
         }
 
+        if(!currentRequest.isExecuted()){
+            executeRequestIfHeadReachedAddress(time);
+        }
+
         while(currentRequest.isExecuted() && !requestQueue.isEmpty()){
-            findShortestFeasibleDeadline(time);
+            if(!isFCFSActive){
+                findShortestFeasibleDeadline(time);
+                if(currentRequest == null){
+                    createGenesisRequest();
+                    continue;
+                }
+            }
             startRequest(time);
             executeRequestIfHeadReachedAddress(time);
         }
@@ -43,7 +66,7 @@ public class FD_SCAN extends Scheduler {
 
     private void findShortestFeasibleDeadline(int time) {
         currentRequest = requestQueue.peek();
-        while(earliestDeadlineIsNotReachable()){
+        while(currentRequest != null && earliestDeadlineIsNotReachable()){
             killRequest(time);
             currentRequest = requestQueue.peek();
         }

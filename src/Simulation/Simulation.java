@@ -81,13 +81,13 @@ public class Simulation {
             time += TIME_UNIT;
         }
 
+        edf.printStatistics(numberOfRequests);
+        fdScan.printStatistics(numberOfRequests);
+
         fcfs.printStatistics(numberOfRequests);
         sstf.printStatistics(numberOfRequests);
         scan.printStatistics(numberOfRequests);
         cScan.printStatistics(numberOfRequests);
-
-        edf.printStatistics(numberOfRequests);
-        fdScan.printStatistics(numberOfRequests);
     }
 
     private void printAllRequests() {

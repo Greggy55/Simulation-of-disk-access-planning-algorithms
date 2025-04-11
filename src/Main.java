@@ -14,11 +14,11 @@ public class Main {
         };
 
         Simulation simulation = new Simulation(
-                5,
+                100,
+                1000,
                 100,
                 100,
-                100,
-                0,
+                20,
                 print
         );
 

@@ -35,6 +35,10 @@ public abstract class Scheduler {
         comparator = new CompoundComparator<>();
         requestQueue = new PriorityQueue<>(comparator);
 
+        createGenesisRequest();
+    }
+
+    protected void createGenesisRequest() {
         currentRequest = new Request(0,0, 0);
         currentRequest.execute(0);
     }
@@ -179,5 +183,14 @@ public abstract class Scheduler {
 
     public void setHalt(boolean halt) {
         this.halt = halt;
+    }
+
+    public boolean requestQueueHasDeadline(){
+        for(Request request : requestQueue){
+            if(request.hasDeadline()){
+                return true;
+            }
+        }
+        return false;
     }
 }
