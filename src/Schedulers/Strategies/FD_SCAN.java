@@ -24,14 +24,14 @@ public class FD_SCAN extends Scheduler {
 
         if(isFCFSActive && requestQueueHasDeadline()){   // set FD-SCAN
             isFCFSActive = false;
-            name = "FD-SCAN";
+            //name = "FD-SCAN";
             comparator = new CompoundComparator<>();
             comparator.addComparator(Comparator.comparingInt(Request::getDeadline));
             comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
         }
         else if (!isFCFSActive && !requestQueueHasDeadline()){  // set FCFS
             isFCFSActive = true;
-            name = "FCFS";
+            //name = "FCFS";
             comparator = new CompoundComparator<>();
             comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
         }
