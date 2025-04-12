@@ -23,6 +23,8 @@ public abstract class Scheduler {
 
     protected int numberOfKilledRequests = 0;
 
+    protected int numberOfStarvedRequests = 0;
+
     protected boolean halt = false;
 
     private boolean movingRight = true;
@@ -55,7 +57,9 @@ public abstract class Scheduler {
         Request request = new Request(time, prev);
         requestQueue.offer(request);
 
-        System.out.println(request);
+        if(print){
+            System.out.printf("(%2d %s)\tAddBehindHead: " + request + "\n", time, name);
+        }
     }
 
     public boolean isEmpty(){
@@ -130,6 +134,7 @@ public abstract class Scheduler {
         if(print){
             System.out.printf("(%2d %s)\tExecuted:\t" + currentRequest + "\n", time, name);
         }
+        checkStarvation(currentRequest);
         stopPrintingIfDone();
     }
 
@@ -153,10 +158,18 @@ public abstract class Scheduler {
         currentRequest.kill(time);
         requestQueue.remove(currentRequest);
         numberOfKilledRequests++;
+
         if(print){
             System.out.printf("(%2d %s)\tKilled:\t" + currentRequest + "\n", time, name);
         }
+        checkStarvation(currentRequest);
         stopPrintingIfDone();
+    }
+
+    public void checkStarvation(Request request){
+        if(request.getWaitTime() > disk.size){
+            numberOfStarvedRequests++;
+        }
     }
 
     public void updateStatistics(){
@@ -166,6 +179,7 @@ public abstract class Scheduler {
 
     public void printStatistics(int numberOfRequests) {
         final int dashes = 15;
+        System.out.println();
         System.out.printf("%s %s %s\n", "-".repeat(dashes), name, "-".repeat(dashes - name.length() + dashes/3));
         System.out.printf("Average waiting time: %.2f\n", 1.0 * totalWaitTime / numberOfRequests);
         System.out.printf("Longest waiting time: %d\n", longestWaitTime);
@@ -204,9 +218,5 @@ public abstract class Scheduler {
             }
         }
         return false;
-    }
-
-    public Disk getDisk() {
-        return disk;
     }
 }

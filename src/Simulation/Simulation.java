@@ -4,12 +4,12 @@ import Schedulers.Algorithms.*;
 import Schedulers.Strategies.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class Simulation {
     private static final int TIME_UNIT = 1;
-    private static final int RADIUS = 10;
 
     private final int diskSize;
     private final int numberOfRequests;
@@ -18,8 +18,10 @@ public class Simulation {
     private final int percentOfProcessesWithDeadline;
 
     private final int numberOfBehindHeadRequests;
+
     private final int numberOfCloseTogetherRequests;
     private final int centerOfCloseTogetherRequests;
+    private final int radiusOfCloseTogetherRequests;
 
     private List<Request> requests;
 
@@ -43,6 +45,7 @@ public class Simulation {
                       int numberOfBehindHeadRequests,
                       int numberOfCloseTogetherRequests,
                       int centerOfCloseTogetherRequests,
+                      int radiusOfCloseTogetherRequests,
                       boolean[] print
     ) {
         this.numberOfRequests = numberOfRequests;
@@ -53,6 +56,7 @@ public class Simulation {
         this.numberOfBehindHeadRequests = Math.min(numberOfBehindHeadRequests, numberOfRequests);
         this.numberOfCloseTogetherRequests = Math.min(numberOfCloseTogetherRequests, numberOfRequests);
         this.centerOfCloseTogetherRequests = Math.min(centerOfCloseTogetherRequests, diskSize);
+        this.radiusOfCloseTogetherRequests = Math.max(radiusOfCloseTogetherRequests, 0);
 
         if(percentOfProcessesWithDeadline < 0){
             percentOfProcessesWithDeadline = 0;
@@ -84,14 +88,7 @@ public class Simulation {
             addRequests();
 
             if(canAddBehindHeadRequest(countOfBehindHeadRequests)){
-                fcfs.addBehindHead(time);
-                sstf.addBehindHead(time);
-                scan.addBehindHead(time);
-                cScan.addBehindHead(time);
-
-                edf.addBehindHead(time);
-                fdScan.addBehindHead(time);
-
+                addBehindHeadRequests();
                 countOfBehindHeadRequests++;
             }
 
@@ -116,6 +113,16 @@ public class Simulation {
         cScan.printStatistics(numberOfRequests);
     }
 
+    private void addBehindHeadRequests() {
+        fcfs.addBehindHead(time);
+        sstf.addBehindHead(time);
+        scan.addBehindHead(time);
+        cScan.addBehindHead(time);
+
+        edf.addBehindHead(time);
+        fdScan.addBehindHead(time);
+    }
+
     private boolean canAddBehindHeadRequest(int countOfBehindHeadRequests) {
         return requestIsDrawn() && countOfBehindHeadRequests < numberOfBehindHeadRequests;
     }
@@ -125,9 +132,14 @@ public class Simulation {
     }
 
     private void printAllRequests() {
+        int[] count = new int[diskSize];
+
         for(Request request : requests){
             System.out.println(request);
+            count[request.getAddress()]++;
         }
+
+        System.out.println(Arrays.toString(count));
     }
 
     private boolean requestHasArrived() {
@@ -173,12 +185,12 @@ public class Simulation {
 
     private void generateCloseTogetherRequest() {
 
-        int begin = Math.max(centerOfCloseTogetherRequests - RADIUS, 0);
-        int end = Math.min(centerOfCloseTogetherRequests + RADIUS, diskSize);
+        int begin = Math.max(centerOfCloseTogetherRequests - radiusOfCloseTogetherRequests, 0);
+        int end = Math.min(centerOfCloseTogetherRequests + radiusOfCloseTogetherRequests, diskSize);
 
         if(generateWithDeadline()){
             Request request = new Request(
-                    rnd.nextInt(maxArrivalTime),
+                    rnd.nextInt(maxArrivalTime / radiusOfCloseTogetherRequests),
                     rnd.nextInt(begin, end),
                     rnd.nextInt(maxDeadlineTime)
             );
