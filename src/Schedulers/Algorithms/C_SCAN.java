@@ -25,8 +25,4 @@ public class C_SCAN extends SCAN {
         super.printStatistics(numberOfRequests);
         System.out.printf("Number of jumps: %d\n", numberOfJumps);
     }
-
-    public int getNumberOfJumps() {
-        return numberOfJumps;
-    }
 }

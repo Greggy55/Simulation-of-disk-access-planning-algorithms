@@ -64,6 +64,12 @@ public class FD_SCAN extends Scheduler {
         moveHead();
     }
 
+    @Override
+    public void printStatistics(int numberOfRequests) {
+        super.printStatistics(numberOfRequests);
+        System.out.printf("Number of killed requests: %d\n", numberOfKilledRequests);
+    }
+
     private void findShortestFeasibleDeadline(int time) {
         currentRequest = requestQueue.peek();
         while(currentRequest != null && earliestDeadlineIsNotReachable()){

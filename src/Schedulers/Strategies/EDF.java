@@ -1,11 +1,9 @@
 package Schedulers.Strategies;
 
-import Comp.CompoundComparator;
 import Schedulers.Scheduler;
 import Simulation.Request;
 
 import java.util.Comparator;
-import java.util.PriorityQueue;
 
 public class EDF extends Scheduler {
 
@@ -21,21 +19,34 @@ public class EDF extends Scheduler {
             System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
-        if(!currentRequest.isExecuted()){
+        currentRequest.updateDeadline();
+
+        if(!currentRequestIsExecutedOrKilled()){
             if(deadlineExistsAndAchieved()){
                 killRequest(time);
+                updateStatistics();
             }
             else{
                 executeRequestIfHeadReachedAddress(time);
             }
         }
 
-        while(currentRequest.isExecuted() && !requestQueue.isEmpty()){
+        while(currentRequestIsExecutedOrKilled() && !requestQueue.isEmpty()){
             startRequest(time);
             executeRequestIfHeadReachedAddress(time);
         }
 
         moveHead();
+    }
+
+    private boolean currentRequestIsExecutedOrKilled() {
+        return currentRequest.isExecuted() || currentRequest.isKilled();
+    }
+
+    @Override
+    public void printStatistics(int numberOfRequests) {
+        super.printStatistics(numberOfRequests);
+        System.out.printf("Number of killed requests: %d\n", numberOfKilledRequests);
     }
 
     private boolean deadlineExistsAndAchieved() {

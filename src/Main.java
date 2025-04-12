@@ -7,18 +7,18 @@ public class Main {
                 false,  // FCFS
                 false,  // SSTF
                 false,  // SCAN
-                true,  // C-SCAN
+                false,  // C-SCAN
 
-                false,  // EDF
+                true,  // EDF
                 false   // FD-SCAN
         };
 
         Simulation simulation = new Simulation(
+                5,
                 100,
-                1000,
                 100,
+                10,
                 100,
-                20,
                 print
         );
 
