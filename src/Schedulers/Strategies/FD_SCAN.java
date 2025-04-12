@@ -22,8 +22,6 @@ public class FD_SCAN extends Scheduler {
             System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
-        //requestQueue.forEach();
-
         if(isFCFSActive && requestQueueHasDeadline()){   // set FD-SCAN
             isFCFSActive = false;
             //name = "FD-SCAN";
@@ -40,18 +38,18 @@ public class FD_SCAN extends Scheduler {
 
         if(!isFCFSActive && headFoundRequest()){    // scan
             Request temp = currentRequest;
-
             currentRequest = getHeadRequest();
-            executeRequestIfHeadReachedAddress(time);
+
+            executeOrKillRequest(time);
 
             currentRequest = temp;
         }
 
-        if(!currentRequest.isExecuted()){
-            executeRequestIfHeadReachedAddress(time);
+        if(!currentRequestIsExecutedOrKilled()){
+            executeOrKillRequest(time);
         }
 
-        while(currentRequest.isExecuted() && !requestQueue.isEmpty()){
+        while(currentRequestIsExecutedOrKilled() && !requestQueue.isEmpty()){
             if(!isFCFSActive){
                 findShortestFeasibleDeadline(time);
                 if(currentRequest == null){
@@ -63,7 +61,18 @@ public class FD_SCAN extends Scheduler {
             executeRequestIfHeadReachedAddress(time);
         }
 
+        requestQueue.forEach(Request::updateDeadline);
         moveHead();
+    }
+
+    private void executeOrKillRequest(int time) {
+        if(deadlineExistsAndAchieved()){
+            killRequest(time);
+            updateStatistics();
+        }
+        else{
+            executeRequestIfHeadReachedAddress(time);
+        }
     }
 
     @Override
@@ -83,5 +92,13 @@ public class FD_SCAN extends Scheduler {
     private boolean earliestDeadlineIsNotReachable() {
         currentRequest.calculateDistanceFromHead(disk.getHead());
         return currentRequest.getDistanceFromHead() < currentRequest.getDeadline();
+    }
+
+    private boolean deadlineExistsAndAchieved() {
+        return currentRequest.hasDeadline() && currentRequest.isDeadlineAchieved();
+    }
+
+    private boolean currentRequestIsExecutedOrKilled() {
+        return currentRequest.isExecuted() || currentRequest.isKilled();
     }
 }
