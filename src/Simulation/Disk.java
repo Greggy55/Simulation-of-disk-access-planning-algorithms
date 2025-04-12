@@ -4,10 +4,12 @@ public class Disk {
     public final int size;
 
     private int head;
+    private int headPrev;
 
     public Disk(int size) {
         this.size = size;
         head = 0;
+        headPrev = -1;
     }
 
     public int getHead() {
@@ -17,8 +19,13 @@ public class Disk {
         return head;
     }
 
+    public int getHeadPrev() {
+        return headPrev;
+    }
+
     public void setHead(int head) {
         if(headAddressIsValid()){
+            headPrev = this.head;
             this.head = head;
         }
     }
@@ -28,6 +35,7 @@ public class Disk {
     }
 
     public void moveHeadLeft(){
+        headPrev = head;
         head--;
     }
 
@@ -36,6 +44,7 @@ public class Disk {
     }
 
     public void moveHeadRight(){
+        headPrev = head;
         head++;
     }
 

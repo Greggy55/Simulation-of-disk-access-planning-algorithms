@@ -49,6 +49,17 @@ public abstract class Scheduler {
         requestQueue.offer(request);
     }
 
+    public void addBehindHead(int time){
+        int prev = disk.getHeadPrev();
+
+        requestQueue.offer(
+                new Request(
+                        time,
+                        prev
+                )
+        );
+    }
+
     public boolean isEmpty(){
         return requestQueue.isEmpty();
     }
@@ -195,5 +206,9 @@ public abstract class Scheduler {
             }
         }
         return false;
+    }
+
+    public Disk getDisk() {
+        return disk;
     }
 }
