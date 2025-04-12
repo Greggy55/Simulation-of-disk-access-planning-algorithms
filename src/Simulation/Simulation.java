@@ -177,41 +177,37 @@ public class Simulation {
         int end = Math.min(centerOfCloseTogetherRequests + RADIUS, diskSize);
 
         if(generateWithDeadline()){
-            requests.add(
-                    new Request(
-                            rnd.nextInt(maxArrivalTime),
-                            rnd.nextInt(begin, end),
-                            rnd.nextInt(maxDeadlineTime)
-                    )
+            Request request = new Request(
+                    rnd.nextInt(maxArrivalTime),
+                    rnd.nextInt(begin, end),
+                    rnd.nextInt(maxDeadlineTime)
             );
+            requests.add(request);
         }
         else{
-            requests.add(
-                    new Request(
-                            rnd.nextInt(maxArrivalTime),
-                            rnd.nextInt(begin, end)
-                    )
+            Request request = new Request(
+                    rnd.nextInt(maxArrivalTime),
+                    rnd.nextInt(begin, end)
             );
+            requests.add(request);
         }
     }
 
     private void generateRegularRequest() {
         if(generateWithDeadline()){
-            requests.add(
-                    new Request(
-                            rnd.nextInt(maxArrivalTime),
-                            rnd.nextInt(diskSize),
-                            rnd.nextInt(maxDeadlineTime)
-                    )
+            Request request = new Request(
+                    rnd.nextInt(maxArrivalTime),
+                    rnd.nextInt(diskSize),
+                    rnd.nextInt(maxDeadlineTime)
             );
+            requests.add(request);
         }
         else{
-            requests.add(
-                    new Request(
-                            rnd.nextInt(maxArrivalTime),
-                            rnd.nextInt(diskSize)
-                    )
+            Request request = new Request(
+                    rnd.nextInt(maxArrivalTime),
+                    rnd.nextInt(diskSize)
             );
+            requests.add(request);
         }
     }
 

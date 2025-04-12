@@ -52,12 +52,10 @@ public abstract class Scheduler {
     public void addBehindHead(int time){
         int prev = disk.getHeadPrev();
 
-        requestQueue.offer(
-                new Request(
-                        time,
-                        prev
-                )
-        );
+        Request request = new Request(time, prev);
+        requestQueue.offer(request);
+
+        System.out.println(request);
     }
 
     public boolean isEmpty(){
