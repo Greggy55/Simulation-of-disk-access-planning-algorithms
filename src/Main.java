@@ -23,11 +23,12 @@ public class Main {
 
                 0,
 
-                0,
+                500,
                 10,
                 5,
                 print
         );
+        // NOCTR = 500
 
         simulation.start();
     }

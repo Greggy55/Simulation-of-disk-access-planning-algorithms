@@ -206,10 +206,19 @@ public class Simulation {
     }
 
     private void generateRegularRequest() {
+        int address = rnd.nextInt(diskSize);
+        if(numberOfCloseTogetherRequests > 0){
+            int begin = Math.max(centerOfCloseTogetherRequests - radiusOfCloseTogetherRequests, 0);
+            int end = Math.min(centerOfCloseTogetherRequests + radiusOfCloseTogetherRequests, diskSize);
+            while(begin <= address && address <= end){
+                address = rnd.nextInt(diskSize);
+            }
+        }
+
         if(generateWithDeadline()){
             Request request = new Request(
                     rnd.nextInt(maxArrivalTime),
-                    rnd.nextInt(diskSize),
+                    address,
                     rnd.nextInt(maxDeadlineTime)
             );
             requests.add(request);
@@ -217,7 +226,7 @@ public class Simulation {
         else{
             Request request = new Request(
                     rnd.nextInt(maxArrivalTime),
-                    rnd.nextInt(diskSize)
+                    address
             );
             requests.add(request);
         }
