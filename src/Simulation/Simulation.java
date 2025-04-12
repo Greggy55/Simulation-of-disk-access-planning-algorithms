@@ -149,9 +149,6 @@ public class Simulation {
     }
 
     private boolean generateWithDeadline() {
-        if (percentOfProcessesWithDeadline < 0) {
-            return false;
-        }
         return rnd.nextInt(100) < percentOfProcessesWithDeadline;
     }
 

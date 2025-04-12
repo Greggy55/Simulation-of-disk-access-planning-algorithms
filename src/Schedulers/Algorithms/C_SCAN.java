@@ -1,6 +1,8 @@
 package Schedulers.Algorithms;
 
 public class C_SCAN extends SCAN {
+    private int numberOfJumps = 0;
+
     public C_SCAN(boolean print, int diskSize) {
         super(print, diskSize);
         name = "C-SCAN";
@@ -13,7 +15,18 @@ public class C_SCAN extends SCAN {
         }
         else{
             disk.setHead(0);
+            numberOfJumps++;
         }
         numberOfHeadMoves++;
+    }
+
+    @Override
+    public void printStatistics(int numberOfRequests) {
+        super.printStatistics(numberOfRequests);
+        System.out.printf("Number of jumps: %d\n", numberOfJumps);
+    }
+
+    public int getNumberOfJumps() {
+        return numberOfJumps;
     }
 }

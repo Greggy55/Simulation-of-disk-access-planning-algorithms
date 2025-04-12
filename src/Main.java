@@ -4,13 +4,13 @@ public class Main {
     public static void main(String[] args) {
 
         boolean[] print = {
-                false,   // FCFS
+                false,  // FCFS
                 false,  // SSTF
                 false,  // SCAN
-                false,  // C-SCAN
+                true,  // C-SCAN
 
                 false,  // EDF
-                true   // FD-SCAN
+                false   // FD-SCAN
         };
 
         Simulation simulation = new Simulation(
