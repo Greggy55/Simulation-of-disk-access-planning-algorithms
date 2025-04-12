@@ -1,13 +1,11 @@
 package Schedulers.Strategies;
 
-import Comp.CompoundComparator;
 import Schedulers.Scheduler;
 import Simulation.Request;
 
 import java.util.Comparator;
 
 public class FD_SCAN extends Scheduler {
-    boolean isFCFSActive = false;
 
     public FD_SCAN(boolean print, int diskSize) {
         super(print, diskSize, "FD-SCAN");
@@ -18,27 +16,11 @@ public class FD_SCAN extends Scheduler {
 
     @Override
     public void schedule(int time) {
-        if(currentRequestIsExecutedOrKilled()){
-            if(isFCFSActive && requestQueueHasDeadline()){   // set FD-SCAN
-                isFCFSActive = false;
-                name = "FD-SCAN";
-                comparator = new CompoundComparator<>();
-                comparator.addComparator(Comparator.comparingInt(Request::getDeadline));
-                comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
-            }
-            else if (!isFCFSActive && !requestQueueHasDeadline()){  // set FCFS
-                isFCFSActive = true;
-                name = "FCFS";
-                comparator = new CompoundComparator<>();
-                comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
-            }
-        }
-
         if(print){
             System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
-        if(!isFCFSActive && headFoundRequest()){    // scan
+        if(headFoundRequest() && requestQueueHasDeadline()){    // scan
             Request temp = currentRequest;
             currentRequest = getHeadRequest();
 
@@ -52,20 +34,14 @@ public class FD_SCAN extends Scheduler {
         }
 
         while(currentRequestIsExecutedOrKilled() && !requestQueue.isEmpty()){
-            if(!isFCFSActive){
-                assert requestQueueHasDeadline();
-                findShortestFeasibleDeadline(time);
-                if(currentRequest == null){
-                    createGenesisRequest();
-                }
-                else{
-                    startRequest(time);
-                    executeRequestIfHeadReachedAddress(time);
-                }
-            }
-            else{
+            findShortestFeasibleDeadline(time);
+
+            if(currentRequest != null){
                 startRequest(time);
                 executeRequestIfHeadReachedAddress(time);
+            }
+            else{
+                createGenesisRequest();
             }
         }
 
