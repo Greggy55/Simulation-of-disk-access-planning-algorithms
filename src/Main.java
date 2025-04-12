@@ -24,8 +24,8 @@ public class Main {
                 0,
 
                 0,
-                0,
                 10,
+                5,
                 print
         );
 

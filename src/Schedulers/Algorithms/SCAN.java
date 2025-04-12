@@ -18,7 +18,7 @@ public class SCAN extends Scheduler {
             System.out.printf("(%2d %s)\tHead: " + disk.getHead() + "\n", time, name);
         }
 
-        if(headFoundRequest()){
+        while(headFoundRequest()){
             currentRequest = getHeadRequest();
             executeRequestIfHeadReachedAddress(time);
         }
