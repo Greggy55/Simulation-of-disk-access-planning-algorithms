@@ -29,7 +29,7 @@ public class Request {
         this.arrivalTime = arrivalTime;
         this.address = address;
 
-        this.deadline = -1;
+        this.deadline = Integer.MAX_VALUE;
         hasDeadline = false;
     }
 

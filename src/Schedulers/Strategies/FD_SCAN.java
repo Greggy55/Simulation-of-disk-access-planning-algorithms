@@ -18,22 +18,24 @@ public class FD_SCAN extends Scheduler {
 
     @Override
     public void schedule(int time) {
-        if(print){
-            System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
+        if(currentRequestIsExecutedOrKilled()){
+            if(isFCFSActive && requestQueueHasDeadline()){   // set FD-SCAN
+                isFCFSActive = false;
+                name = "FD-SCAN";
+                comparator = new CompoundComparator<>();
+                comparator.addComparator(Comparator.comparingInt(Request::getDeadline));
+                comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
+            }
+            else if (!isFCFSActive && !requestQueueHasDeadline()){  // set FCFS
+                isFCFSActive = true;
+                name = "FCFS";
+                comparator = new CompoundComparator<>();
+                comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
+            }
         }
 
-        if(isFCFSActive && requestQueueHasDeadline()){   // set FD-SCAN
-            isFCFSActive = false;
-            //name = "FD-SCAN";
-            comparator = new CompoundComparator<>();
-            comparator.addComparator(Comparator.comparingInt(Request::getDeadline));
-            comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
-        }
-        else if (!isFCFSActive && !requestQueueHasDeadline()){  // set FCFS
-            isFCFSActive = true;
-            //name = "FCFS";
-            comparator = new CompoundComparator<>();
-            comparator.addComparator(Comparator.comparingInt(Request::getArrivalTime));
+        if(print){
+            System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
         if(!isFCFSActive && headFoundRequest()){    // scan
@@ -51,14 +53,20 @@ public class FD_SCAN extends Scheduler {
 
         while(currentRequestIsExecutedOrKilled() && !requestQueue.isEmpty()){
             if(!isFCFSActive){
+                assert requestQueueHasDeadline();
                 findShortestFeasibleDeadline(time);
                 if(currentRequest == null){
                     createGenesisRequest();
-                    continue;
+                }
+                else{
+                    startRequest(time);
+                    executeRequestIfHeadReachedAddress(time);
                 }
             }
-            startRequest(time);
-            executeRequestIfHeadReachedAddress(time);
+            else{
+                startRequest(time);
+                executeRequestIfHeadReachedAddress(time);
+            }
         }
 
         requestQueue.forEach(Request::updateDeadline);
@@ -83,15 +91,21 @@ public class FD_SCAN extends Scheduler {
 
     private void findShortestFeasibleDeadline(int time) {
         currentRequest = requestQueue.peek();
-        while(currentRequest != null && earliestDeadlineIsNotReachable()){
-            killRequest(time);
-            currentRequest = requestQueue.peek();
+        while(currentRequest != null){
+            currentRequest.calculateDistanceFromHead(disk.getHead());
+            if(earliestDeadlineIsNotReachable()){
+                killRequest(time);
+                currentRequest = requestQueue.peek();
+            }
+            else{
+                break;
+            }
         }
     }
 
     private boolean earliestDeadlineIsNotReachable() {
         currentRequest.calculateDistanceFromHead(disk.getHead());
-        return currentRequest.getDistanceFromHead() < currentRequest.getDeadline();
+        return currentRequest.getDistanceFromHead() > currentRequest.getDeadline();
     }
 
     private boolean deadlineExistsAndAchieved() {
