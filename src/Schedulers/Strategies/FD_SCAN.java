@@ -22,6 +22,8 @@ public class FD_SCAN extends Scheduler {
             System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
+        //requestQueue.forEach();
+
         if(isFCFSActive && requestQueueHasDeadline()){   // set FD-SCAN
             isFCFSActive = false;
             //name = "FD-SCAN";

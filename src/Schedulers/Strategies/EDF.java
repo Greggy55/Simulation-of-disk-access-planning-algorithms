@@ -19,8 +19,6 @@ public class EDF extends Scheduler {
             System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
-        currentRequest.updateDeadline();
-
         if(!currentRequestIsExecutedOrKilled()){
             if(deadlineExistsAndAchieved()){
                 killRequest(time);
@@ -36,6 +34,7 @@ public class EDF extends Scheduler {
             executeRequestIfHeadReachedAddress(time);
         }
 
+        requestQueue.forEach(Request::updateDeadline);
         moveHead();
     }
 
