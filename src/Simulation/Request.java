@@ -59,7 +59,9 @@ public class Request {
     }
 
     public void updateDeadline(){
-        deadline--;
+        if(hasDeadline){
+            deadline--;
+        }
     }
 
     public boolean isDeadlineAchieved(){

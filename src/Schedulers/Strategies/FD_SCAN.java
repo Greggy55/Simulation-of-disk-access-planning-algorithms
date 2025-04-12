@@ -6,6 +6,7 @@ import Simulation.Request;
 import java.util.Comparator;
 
 public class FD_SCAN extends Scheduler {
+    boolean scanning = false;
 
     public FD_SCAN(boolean print, int diskSize) {
         super(print, diskSize, "FD-SCAN");
@@ -20,7 +21,7 @@ public class FD_SCAN extends Scheduler {
             System.out.printf("(%2d %s) \tHead: " + disk.getHead() + "\n", time, name);
         }
 
-        if(headFoundRequest() && requestQueueHasDeadline()){    // scan
+        if(headFoundRequest() && scanning){    // scan
             Request temp = currentRequest;
             currentRequest = getHeadRequest();
 
@@ -39,9 +40,12 @@ public class FD_SCAN extends Scheduler {
             if(currentRequest != null){
                 startRequest(time);
                 executeRequestIfHeadReachedAddress(time);
+
+                scanning = requestQueueHasDeadline();
             }
-            else{
+            else{   // no reachable requests
                 createGenesisRequest();
+                scanning = false;
             }
         }
 
