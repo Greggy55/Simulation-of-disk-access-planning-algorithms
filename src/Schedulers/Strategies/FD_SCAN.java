@@ -66,7 +66,7 @@ public class FD_SCAN extends Scheduler {
     @Override
     public void printStatistics(int numberOfRequests) {
         super.printStatistics(numberOfRequests);
-        System.out.printf("Number of killed requests: %d\n", numberOfKilledRequests);
+        System.out.printf("Number of killed requests: %d (%.0f%%)\n", numberOfKilledRequests, 100.0*numberOfKilledRequests/numberOfRequests);
     }
 
     private void findShortestFeasibleDeadline(int time) {
