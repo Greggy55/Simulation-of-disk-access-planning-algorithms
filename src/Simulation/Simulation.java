@@ -170,8 +170,24 @@ public class Simulation {
         }
     }
 
+    private int generateArtificialRequests(){
+        int count = 0;
+
+        Request request = new Request(0,10,10);
+        requests.add(request);
+        count++;
+
+        return count;
+    }
+
+    private int shift(){
+        int val = 0;
+        //val = generateArtificialRequests();
+        return val;
+    }
+
     private void generateRequests(){
-        for(int i = 0; i < numberOfRequests - numberOfBehindHeadRequests - numberOfCloseTogetherRequests; i++){
+        for(int i = shift(); i < numberOfRequests - numberOfBehindHeadRequests - numberOfCloseTogetherRequests; i++){
             generateRegularRequest();
         }
 
