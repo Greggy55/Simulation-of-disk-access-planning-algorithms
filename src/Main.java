@@ -13,22 +13,31 @@ public class Main {
                 false   // FD-SCAN
         };
 
+        int numberOfRequests = 1000;
+        int maxArrivalTime = 500;
+        int diskSize = 100;
+
+        int maxDeadlineTime = 100;
+        int percentOfProcessesWithDeadline = 0;
+
+        int numberOfBehindHeadRequests = 0;
+
+        int numberOfCloseTogetherRequests = 0; // 200
+        int centerOfCloseTogetherRequests = 10;
+        int radiusOfCloseTogetherRequests = 5;
+
         Simulation simulation = new Simulation(
-                1000,
-                500,
-                100,
-
-                100,
-                0,
-
-                0,
-
-                0,
-                10,
-                5,
+                numberOfRequests,
+                maxArrivalTime,
+                diskSize,
+                maxDeadlineTime,
+                percentOfProcessesWithDeadline,
+                numberOfBehindHeadRequests,
+                numberOfCloseTogetherRequests,
+                centerOfCloseTogetherRequests,
+                radiusOfCloseTogetherRequests,
                 print
         );
-        // NOCTR = 200
 
         simulation.start();
     }
