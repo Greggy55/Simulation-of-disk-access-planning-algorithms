@@ -10,7 +10,7 @@ public class Main {
                 false,  // C-SCAN
 
                 false,  // EDF
-                false   // FD-SCAN
+                true   // FD-SCAN
         };
 
         Simulation simulation = new Simulation(

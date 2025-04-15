@@ -186,7 +186,7 @@ public class Simulation {
 
     private int shift(){
         int val = 0;
-        val = generateArtificialRequests();
+        //val = generateArtificialRequests();
         return val;
     }
 
