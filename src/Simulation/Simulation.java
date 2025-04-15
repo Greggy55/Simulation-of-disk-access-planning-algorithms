@@ -182,7 +182,7 @@ public class Simulation {
 
     private int shift(){
         int val = 0;
-        //val = generateArtificialRequests();
+        val = generateArtificialRequests();
         return val;
     }
 
@@ -206,7 +206,7 @@ public class Simulation {
 
         if(generateWithDeadline()){
             Request request = new Request(
-                    rnd.nextInt(maxArrivalTime / radiusOfCloseTogetherRequests),
+                    maxArrivalTime / 2,
                     rnd.nextInt(begin, end),
                     rnd.nextInt(maxDeadlineTime)
             );
@@ -214,7 +214,7 @@ public class Simulation {
         }
         else{
             Request request = new Request(
-                    rnd.nextInt(maxArrivalTime),
+                    maxArrivalTime / 2,
                     rnd.nextInt(begin, end)
             );
             requests.add(request);

@@ -52,12 +52,13 @@ public class FD_SCAN extends Scheduler {
     }
 
     private void executeOrKillRequest(int time) {
-        if(deadlineExistsAndAchieved()){
-            killRequest(time);
+        if(headReachedAddress()){
+            executeRequest(time);
             updateStatistics();
         }
-        else{
-            executeRequestIfHeadReachedAddress(time);
+        else if(deadlineExistsAndAchieved()){
+            killRequest(time);
+            updateStatistics();
         }
     }
 
