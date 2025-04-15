@@ -9,7 +9,7 @@ public class Main {
                 false,  // SCAN
                 false,  // C-SCAN
 
-                false,  // EDF
+                true,  // EDF
                 false   // FD-SCAN
         };
 
@@ -19,11 +19,11 @@ public class Main {
                 100,
 
                 100,
-                0,
+                50,
 
                 0,
 
-                500,
+                0,
                 10,
                 5,
                 print

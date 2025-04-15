@@ -20,22 +20,42 @@ public class EDF extends Scheduler {
         }
 
         if(!currentRequestIsExecutedOrKilled()){
-            if(deadlineExistsAndAchieved()){
-                killRequest(time);
+            if(headReachedAddress()){
+                executeRequest(time);
                 updateStatistics();
             }
-            else{
-                executeRequestIfHeadReachedAddress(time);
+            else if(deadlineExistsAndAchieved()){
+                killRequest(time);
+                updateStatistics();
             }
         }
 
         while(currentRequestIsExecutedOrKilled() && !requestQueue.isEmpty()){
-            startRequest(time);
-            executeRequestIfHeadReachedAddress(time);
+            if(findShortestDeadline(time)){
+                startRequest(time);
+                executeRequestIfHeadReachedAddress(time);
+            }
+            else{
+                createGenesisRequest();
+            }
         }
 
         requestQueue.forEach(Request::updateDeadline);
         moveHead();
+    }
+
+    private boolean findShortestDeadline(int time) {
+        currentRequest = requestQueue.peek();
+        while(currentRequest != null){
+            if(currentRequest.isDeadlineAchieved()){
+                killRequest(time);
+                currentRequest = requestQueue.peek();
+            }
+            else{
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean currentRequestIsExecutedOrKilled() {

@@ -65,7 +65,7 @@ public class Request {
     }
 
     public boolean isDeadlineAchieved(){
-        return deadline < 0;
+        return deadline <= 0;
     }
 
     public boolean isKilled() {

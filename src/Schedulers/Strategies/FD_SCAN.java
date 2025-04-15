@@ -35,9 +35,7 @@ public class FD_SCAN extends Scheduler {
         }
 
         while(currentRequestIsExecutedOrKilled() && !requestQueue.isEmpty()){
-            findShortestFeasibleDeadline(time);
-
-            if(currentRequest != null){
+            if(findShortestFeasibleDeadline(time)){
                 startRequest(time);
                 executeRequestIfHeadReachedAddress(time);
 
@@ -69,7 +67,7 @@ public class FD_SCAN extends Scheduler {
         System.out.printf("Number of killed requests: %d (%.0f%%)\n", numberOfKilledRequests, 100.0*numberOfKilledRequests/numberOfRequests);
     }
 
-    private void findShortestFeasibleDeadline(int time) {
+    private boolean findShortestFeasibleDeadline(int time) {
         currentRequest = requestQueue.peek();
         while(currentRequest != null){
             currentRequest.calculateDistanceFromHead(disk.getHead());
@@ -78,9 +76,10 @@ public class FD_SCAN extends Scheduler {
                 currentRequest = requestQueue.peek();
             }
             else{
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     private boolean earliestDeadlineIsNotReachable() {
