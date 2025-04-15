@@ -124,7 +124,11 @@ public class Simulation {
     }
 
     private boolean canAddBehindHeadRequest(int countOfBehindHeadRequests) {
-        return requestIsDrawn() && countOfBehindHeadRequests < numberOfBehindHeadRequests;
+        return requestIsDrawn() && limitOfBehindHeadRequestsIsNotAchieved(countOfBehindHeadRequests);
+    }
+
+    private boolean limitOfBehindHeadRequestsIsNotAchieved(int countOfBehindHeadRequests) {
+        return countOfBehindHeadRequests < numberOfBehindHeadRequests;
     }
 
     private boolean requestIsDrawn() {

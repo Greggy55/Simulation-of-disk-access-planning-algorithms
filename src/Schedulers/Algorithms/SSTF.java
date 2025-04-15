@@ -41,4 +41,10 @@ public class SSTF extends Scheduler {
 
         moveHead();
     }
+
+    @Override
+    public void printStatistics(int numberOfRequests) {
+        super.printStatistics(numberOfRequests);
+        System.out.printf("Number of starved requests: %d\n", numberOfStarvedRequests);
+    }
 }

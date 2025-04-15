@@ -10,7 +10,7 @@ public class Main {
                 false,  // C-SCAN
 
                 false,  // EDF
-                true   // FD-SCAN
+                false   // FD-SCAN
         };
 
         Simulation simulation = new Simulation(
@@ -19,7 +19,7 @@ public class Main {
                 100,
 
                 100,
-                50,
+                0,
 
                 0,
 
@@ -28,7 +28,7 @@ public class Main {
                 5,
                 print
         );
-        // NOCTR = 500
+        // NOCTR = 200
 
         simulation.start();
     }

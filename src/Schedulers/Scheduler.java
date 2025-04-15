@@ -187,7 +187,6 @@ public abstract class Scheduler {
         System.out.printf("Average waiting time: %.2f\n", 1.0 * totalWaitTime / numberOfRequests);
         System.out.printf("Longest waiting time: %d\n", longestWaitTime);
         System.out.printf("Number of head moves: %d\n", numberOfHeadMoves);
-        System.out.printf("Number of starved requests: %d\n", numberOfStarvedRequests);
     }
 
     public boolean headFoundRequest() {
